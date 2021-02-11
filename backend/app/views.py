@@ -14,3 +14,8 @@ def register_user(request):
 def login_user(request):
     context = {}
     return render(request, 'login_user.html', context)
+
+
+def select_topic(request):
+    context = {}
+    return render(request, 'select_topic.html', context)
