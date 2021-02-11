@@ -19,3 +19,8 @@ def login_user(request):
 def select_topic(request):
     context = {}
     return render(request, 'select_topic.html', context)
+
+
+def drill_topic(request):
+    context = {}
+    return render(request, 'drill_topic.html', context)
