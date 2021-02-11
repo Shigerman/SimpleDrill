@@ -9,3 +9,8 @@ def homepage(request):
 def register_user(request):
     context = {}
     return render(request, 'register_user.html', context)
+
+
+def login_user(request):
+    context = {}
+    return render(request, 'login_user.html', context)

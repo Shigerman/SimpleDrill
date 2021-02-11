@@ -22,5 +22,6 @@ app_name = 'app'
 urlpatterns = [
     path('', backend.app.views.homepage),
     path('register_user/', backend.app.views.register_user),
+    path('login_user/', backend.app.views.login_user),
     path('admin/', admin.site.urls),
 ]
