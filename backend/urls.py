@@ -25,5 +25,6 @@ urlpatterns = [
     path('login_user/', backend.app.views.login_user),
     path('select_topic/', backend.app.views.select_topic),
     path('drill_topic/', backend.app.views.drill_topic),
+    path('explain_test/', backend.app.views.explain_test),
     path('admin/', admin.site.urls),
 ]

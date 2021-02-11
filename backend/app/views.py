@@ -24,3 +24,8 @@ def select_topic(request):
 def drill_topic(request):
     context = {}
     return render(request, 'drill_topic.html', context)
+
+
+def explain_test(request):
+    context = {}
+    return render(request, 'explain_test.html', context)
