@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>simpledrill</title>
-    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/numl/1.0.0-beta.10/index.js"></script>
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block body %}
 
 <nu-flex flow="column" content="center">
     <nu-flex content="center" height="30">
@@ -14,25 +8,24 @@
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                Register  </nu-btn>
+                    Register  </nu-btn>
             </nu-flex>
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                Login  </nu-btn>
+                    Login  </nu-btn>
             </nu-flex>
 
             <nu-flex content="space-around" items="center" height="18">
                 <nu-btn height="7" width="20" size="lg" fill="#306998" color="white">
-                Drill  </nu-btn>
+                    Drill  </nu-btn>
 
                 <nu-btn height="7" width="20" size="lg" fill="#ffd43b" color="dark grey">
-                Take the test </nu-btn>
+                    Take the test </nu-btn>
             </nu-flex>
 
         </nu-flex>
     </nu-flex>
 </nu-flex>
 
-</body>
-</html>
+{% endblock %}

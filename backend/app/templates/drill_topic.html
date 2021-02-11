@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>simpledrill</title>
-    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/numl/1.0.0-beta.10/index.js"></script>
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block body %}
 
 <nu-root>
 <nu-flex flow="column" content="center">
@@ -55,10 +49,8 @@
             <p> answer text </p>
         </nu-card>
     </nu-flex>
-    </nu-flex>
 </nu-flex>
 </nu-flex>
 </nu-root>
 
-</body>
-</html>
+{% endblock %}
