@@ -1,13 +1,24 @@
+from backend.app.models import Person
+from .. import core
+
+
 class User:
     """Represents logged-in user and their actions"""
 
+    def __init__(self, user_id: str):
+        try:
+            self.id = user_id
+            self.db = Person.objects.get(session__exact=user_id)
+        except Person.DoesNotExist as ex:
+            raise LookupError(f"User with id {user_id} not in DB") from ex
+
     @staticmethod
-    def register(login: str, password: str, invite: str) -> User:
+    def register(login: str, password: str, invite: str) -> Person:
         pass
 
 
     @staticmethod
-    def login(login: str, password: str) -> User:
+    def login(login: str, password: str) -> Person:
         pass
     
 

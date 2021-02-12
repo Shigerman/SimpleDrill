@@ -14,7 +14,7 @@ Drilling screen elements:
 * 'D/Q' button meaning 'I don't know'
 * 'N/A' button meaning 'no correct options available'
 * 'End' button, which returns to the homepage screen
-* 'Next question' button (to impleent later)
+* 'Next question' button (to implement later)
 
 Explain test screen elements:
 * Test process or result explanation
@@ -26,7 +26,14 @@ Test screen elements:
 * 'Submit' button
 
 ### activity algorithms
-* Correct answer >>> show correct answer and explanation >>> next question
-  (to impleent later)
-* Incorrect answer or "I don't know" >>> show correct answer and explanation
-  >>> next question (to impleent later)
+* Correct answer >>> show correct answer and its explanation >>> next question
+  (to implement later)
+* Incorrect answer or "I don't know" answer >>> show correct answer and
+  its explanation >>> next question (to implement later)
+
+
+### testing the app
+Command to run the tests:
+```
+poetry run python manage.py test backend
+```
