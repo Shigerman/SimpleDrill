@@ -26,7 +26,7 @@ class TestStep(models.Model):
 
 
 class TestSummary(models.Model):
-    user = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     test_question = models.ForeignKey(TestStep, on_delete=models.CASCADE)
     topic = models.TextField(default="")
     user_answer = models.CharField(max_length=50)
@@ -46,11 +46,11 @@ class Answer(models.Model):
 
 
 class CurrentAnswers(models.Model):
-    user = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
 
 class ChallengeSummary(models.Model):
-    user = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     failed_count = models.IntegerField(default=0)

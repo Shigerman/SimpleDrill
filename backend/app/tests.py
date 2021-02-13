@@ -95,32 +95,8 @@ class UserTests(TestCase):
         self.assertIsNotNone(test_step)
 
 
-    def test_start_testquestions_are_written_into_db_for_user(self):
-        user = create_person()
-        save_test_questions_to_db()
-        start_question_count = len(TestStep.objects.filter(topic="start"))
-
-        user_start_question_count = len(TestSummary.objects.filter(
-            user=user.db, topic="start"))
-        self.assertIsNotNone(user_start_question_count)
-        self.assertTrue(start_question_count == user_start_question_count)
-
-
 class Challengetests(TestCase):
     def test_save_question_to_db(self):
-        Question(
-            question_text=SAMPLE_QUESTION_TEXT,
-            explanation_text=SAMPLE_EXPLANATION_TEXT,
-            topic=SAMPLE_TOPIC_TEXT).save()
-        question = Question.objects.get(question_text=SAMPLE_QUESTION_TEXT)
-        self.assertIsNotNone(question)
-        self.assertTrue(question.question_text == SAMPLE_QUESTION_TEXT)
-        self.assertTrue(question.explanation_text == SAMPLE_EXPLANATION_TEXT)
-        self.assertTrue(question.topic == SAMPLE_TOPIC_TEXT)
-
-
-    def test_save_answer_to_db(self):
-        test_save_question_to_db(self):
         Question(
             question_text=SAMPLE_QUESTION_TEXT,
             explanation_text=SAMPLE_EXPLANATION_TEXT,
