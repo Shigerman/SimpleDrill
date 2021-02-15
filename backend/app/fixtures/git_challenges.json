@@ -1,0 +1,140 @@
+[
+    { "topic": "git",
+      "q": "What does 'git' mean?",
+      "th": "Linus Torvalds sarcastically said about the name git (which means 'unpleasant person' in British English slang): 'I'm an egotistical bastard, and I name all my projects after myself. First 'Linux', now 'git'.",
+      "+": ["an unpleasant person"],
+      "-": [
+        "Global Information Transfer",
+        "General Indefinite Transfer",
+        "just a new word was coined",
+        "a giant transfer"
+      ]
+      },
+    { "topic": "git",
+      "q": "What git command updates your current local working branch from a remote repository?",
+      "th": "'git pull' command updates your current local working branch from a remote repository.",
+      "+": ["git pull"],
+      "-": [
+        "git push",
+        "git stash",
+        "git status",
+        "git remote",
+        "git branch"
+      ]
+    },
+    { "topic": "git",
+      "q": "What two commands does git pull consist of?",
+      "th": "Git pull is the combination of two commands. First, it does a git fetch to update the remotes/origin branches. Then, if the branch you are on is tracking a remote branch, then it does a git merge of the corresponding remote/origin branch to your branch.",
+      "+": ["git fetch + git merge"],
+      "-": [
+        "git fetch + git stash",
+        "git stash + git fetch",
+        "git stash + git merge",
+        "git status + git merge",
+        "git remote + git fetch",
+        "git remote + git fetch"
+      ]
+    },
+    { "topic": "git",
+      "q": "Who is the creator of git?",
+      "th": "Git was created by Linus Torvalds in 2005 for development of the Linux kernel, with other kernel developers contributing to its initial development.",
+      "+": ["Linus Torvalds"],
+      "-": [
+        "Dennis Ritchie",
+        "Rob Pike",
+        "Ray Thomas Fielding",
+        "Bill Gates",
+        "Guido van Rossum",
+        "Ken Thompson"
+      ]
+    },
+    { "topic": "git",
+      "q": "What is the difference between a pull request and a merge request?",
+      "th": "PR is a github term, MR is a gitlab term. In other characteristics they are the same.",
+      "+": ["PR is used in github projects, MR in gitlab projects"],
+      "-": [
+        "PR is used when merging into master branch, MR - for other branches",
+        "PR is for large projects, MR for smaller ones",
+        "MR is for forked projects, PR for non-forked",
+        "MR is used only in projects with CI/CD",
+        "PR is used in gitlab projects, MR in github projects"
+      ]
+    },
+    { "topic": "git",
+      "q": "What git command helps to 'hide' changes temporarily to get a clean working directory?",
+      "th": "Use 'git stash' when you want to record the current state of the working directory and the index, but want to go back to a clean working directory. The command saves your local modifications away and reverts the working directory to match the HEAD commit.",
+      "+": ["git stash"],
+      "-": [
+        "git branch",
+        "git save",
+        "git keep",
+        "git hide"
+      ]
+    },
+    { "topic": "git",
+      "q": "What git command helps to see stashed code?",
+      "th": "The stashed away code modifications can be listed with 'git stash list'.",
+      "+": ["git stash list"],
+      "-": [
+        "git stash",
+        "git stash see",
+        "git stash pop up"
+      ]
+    },
+    { "topic": "git",
+      "q": "What git command helps to get the code back from stash?",
+      "th": "With git stash pop [--index] you can remove a single stashed state from the stash list and apply it on top of the current working tree state, i.e., do the inverse operation of git stash. The working directory must match the index.",
+      "+": ["git stash pop [--index]"],
+      "-": [
+        "git stash restore [--index]",
+        "git stash append [--index]",
+        "git stash back [--index]"
+      ]
+    },
+    { "topic": "git",
+      "q": "What is the correct analogy for a name of a git branch?",
+      "th": "A name of a git branch is like a tag or label.",
+      "+": [
+        "tag",
+        "label"
+      ],
+      "-": [
+        "scope",
+        "paradigm",
+        "encoding",
+        "function",
+        "separation"
+      ]
+    },
+    { "topic": "git",
+      "q": "Linus Torvalds created git. What problem was he solving that led to creation of git?",
+      "th": "Linus Torvalds was solving the problem of dealing with new pieces of code that other developers sent to him to develop Linux (problem with merges).",
+      "+": ["problem with merges"],
+      "-": [
+        "problem with command line",
+        "problem with bugs",
+        "problem with big code size"
+      ]
+    },
+    { "topic": "git",
+      "q": "What Visual Studio Code extension helps to see who did what changes in code?",
+      "th": "GitLens extension supercharges the Git capabilities built into Visual Studio Code. It helps you to visualize code authorship at a glance via Git blame annotations and code lens.",
+      "+": ["GitLens"],
+      "-": [
+        "GitSee",
+        "GitHelp",
+        "GitSuper"
+      ]
+    },
+    { "topic": "git",
+      "q": "What question should a commit message answer?",
+      "th": "A commit message should answer the 'why' question (why you decided to make these changes). The changes made in the code usually answer 'what' and 'where' questions. There is no need to describe it with words additionally.",
+      "+": ["why?"],
+      "-": [
+        "what?",
+        "where?",
+        "who?"
+      ]
+    }
+  ]
+  

@@ -1,0 +1,289 @@
+[{  "topic": "http",
+    "q": "What is the difference between GET and POST methods in http?",
+    "th": "GET and POST http methods are actually the same, but there is an agreement that POST can have a body and can modify server state.",
+    "+": [
+      "POST can have a body",
+      "POST can modify a server state",
+      "GET is expected to be idempotent"],
+    "-": [
+      "GET can have a body",
+      "GET can modify a server state",
+      "POST is expected to be idempotent",
+      "POST always returns None while GET returns what was requested",
+      "They have different encoding",
+      "GET is used to get items while POST is used to post items",
+      "They are text strings in http protocol with meaning up to a developer who implements the app logic"
+    ]
+  },
+  { "topic": "http",
+    "q": "Which of these are 'success' response codes?",
+    "th": "2xx...3xx response codes are considered to be an operation success.",
+    "+": ["2xx...3xx"],
+    "-": [
+      "2xx...4xx",
+      "3xx...4xx",
+      "4xx...5xx"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http request is not idempotent?",
+    "th": "It's an industry agreement between developers that 'POST' can change server state, while other verbs should not. It's not strictly held, to be honest.",
+    "+": ["POST"],
+    "-": [
+      "GET",
+      "PUT",
+      "DELETE",
+      "UPDATE",
+      "CONNECT"
+    ]
+  },
+  { "topic": "http",
+    "q": "What port is intended for http requests?",
+    "th": "Port 80 is the port number assigned to commonly used internet communication protocol, Hypertext Transfer Protocol (HTTP). It is the port from which a computer sends and receives Web client-based communication and messages from a Web server and is used to send and receive HTML pages or data.",
+    "+": ["port 80"],
+    "-": [
+      "port 443",
+      "port 8000",
+      "port 35",
+      "port 86",
+      "port 256",
+      "no dedicated port, it depends on the app"
+    ]
+  },
+  { "topic": "http",
+    "q": "What port is intended for https requests?",
+    "th": "Port 443 is intended for Hypertext Transfer Protocol Secure (HTTPS) requests. HTTPS is an extension of http. It is used for secure communication over a computer network. In HTTPS, the communication protocol is encrypted using Transport Layer Security (TLS) or, formerly, Secure Sockets Layer (SSL).",
+    "+": ["port 443"],
+    "-": [
+      "port 80",
+      "port 8000",
+      "port 35",
+      "port 86",
+      "port 256",
+      "no dedicated port, it depends on the app"
+    ]
+  },
+  { "topic": "http",
+    "q": "What does letter 'S' stand for in 'HTTPS'?",
+    "th": "Hypertext Transfer Protocol Secure (HTTPS). 'S' means 'Secure'.",
+    "+": ["'S' means 'Secure'"],
+    "-": [
+      "'S' means 'Safety'",
+      "'S' means 'Sockets'",
+      "'S' means 'Speed'",
+      "'S' means 'Shell'",
+      "'S' means 'Synchronous'"
+    ]
+  },
+  { "topic": "http",
+    "q": " ... is an http status code ('Not Found').",
+    "th": "404 is an http status code ('Not Found').",
+    "+": ["404"],
+    "-": [
+      "400",
+      "401",
+      "301",
+      "403",
+      "500"
+    ]
+  },
+  { "topic": "http",
+    "q": " ... is an http status code ('Bad Request').",
+    "th": "400 is an http status code ('Bad Request').",
+    "+": ["400"],
+    "-": [
+      "301",
+      "401",
+      "403",
+      "404",
+      "500"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http status code means that the user is authorized, but does not have access to all parts of the application?",
+    "th": "403 http status code means that the user is authorized, but does not have access to all parts of the application.",
+    "+": ["403 Forbidden"],
+    "-": [
+      "500 Bad Request",
+      "401 Unauthorised",
+      "404 Not Found",
+      "405 Method not Allowed",
+      "406 Not Acceptable"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http status code means that the user is not authenticated?",
+    "th": "401 http status code means that the user is not authenticated.",
+    "+": ["401"],
+    "-": [
+      "400",
+      "403",
+      "404",
+      "500"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http status code means that the payment is required?",
+    "th": "402 http status code means that the payment is required.",
+    "+": ["402"],
+    "-": [
+      "401",
+      "403",
+      "405"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http status code means that the method is not allowed?",
+    "th": "405 http status code means that the method is not allowed.",
+    "+": ["405"],
+    "-": [
+      "402",
+      "403",
+      "406"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http status code means 'Unprocessable Entity'?",
+    "th": "422 http status code means 'Unprocessable Entity'.",
+    "+": ["422"],
+    "-": [
+      "402",
+      "405",
+      "408"
+    ]
+  },
+  { "topic": "http",
+    "q": "What is a standard response for successful http requests?",
+    "th": "200 OK is a standard response for successful http requests.",
+    "+": ["200"],
+    "-": [
+      "201",
+      "400",
+      "500"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http response code tells that the request has been fulfilled, resulting in the creation of a new resource?",
+    "th": "'201 Created' http response code tells that the request has been fulfilled, resulting in the creation of a new resource.",
+    "+": ["201"],
+    "-": [
+      "202",
+      "203",
+      "204"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http response code tells that the server successfully processed the request, and is not returning any content?",
+    "th": "'204 No Content' http response code tells that the server successfully processed the request, and is not returning any content.",
+    "+": ["204"],
+    "-": [
+      "202",
+      "203",
+      "201"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http response code tells that this and all future requests should be directed to another URI?",
+    "th": "'301 Moved Permanently' http response code tells that this and all future requests should be directed to another URI.",
+    "+": ["301"],
+    "-": [
+      "300",
+      "302",
+      "305"
+    ]
+  },
+  { "topic": "http",
+    "q": "What is the generic http response code telling that something has gone wrong on the web site's server?",
+    "th": "'500 Internal Server Error' http response code tells that something has gone wrong on the web site's server.",
+    "+": ["500"],
+    "-": [
+      "501",
+      "502",
+      "504"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http response code tells that the server either does not recognize the request method, or it lacks the ability to fulfil the request?",
+    "th": "'501 Not Implemented' is the http response code telling that the server either does not recognize the request method, or it lacks the ability to fulfil the request.",
+    "+": ["501"],
+    "-": [
+      "500",
+      "502",
+      "504"
+    ]
+  },
+  { "topic": "http",
+    "q": "What http response code tells that the server cannot handle the request (because it is overloaded or down for maintenance)?",
+    "th": "'503 Service Unavailable' is the http response code telling that the server cannot handle the request (because it is overloaded or down for maintenance.",
+    "+": ["503"],
+    "-": [
+      "500",
+      "502",
+      "504"
+    ]
+  },
+  { "topic": "http",
+    "q": "What parts does an http request consist of?",
+    "th": "An http request consists of three parts: request line, headers, message body (optional). Request line consists of a verb, path, http version. Host is an obligatory header. If there is content-length in headers, you should expect a body.",
+    "+": ["request line, headers, message body"],
+    "-": [
+      "verb, path, message body",
+      "request, response, message body",
+      "verb, path, headers"
+    ]
+  },
+  { "topic": "http",
+    "q": "What parts does a request line of an http request consist of?",
+    "th": "An http request consists of three parts: request line, headers, message body (optional). Request line consists of a verb, path, http version. Host is an obligatory header. If there is content-length in headers, you should expect a body.",
+    "+": ["verb, path, http version"],
+    "-": [
+      "verb, path, host",
+      "path, header, body",
+      "path, host, body"
+    ]
+  },
+  { "topic": "http",
+    "q": "What obligatory header does every http request have?",
+    "th": "An http request consists of three parts: request line, headers, message body (optional). Request line consists of a verb, path, http version. Host is an obligatory header. If there is content-length in headers, you should expect a body.",
+    "+": ["host"],
+    "-": [
+      "content-length",
+      "content-type",
+      "last-modified"
+    ]
+  },
+  { "topic": "http",
+    "q": "What is optional in http requests?",
+    "th": "An http request consists of three parts: request line, headers, message body (optional). Request line consists of a verb, path, http version. Host is an obligatory header. If there is content-length in headers, you should expect a body.",
+    "+": ["message body"],
+    "-": [
+      "path",
+      "verb",
+      "host"
+    ]
+  },
+  { "topic": "http",
+    "q": "Choose one of the principal authors of the HTTP protocol.",
+    "th": "Roy Thomas Fielding is an American computer scientist, one of the principal authors of the HTTP specification and the originator of the Representational State Transfer architectural style. ",
+    "+": ["Roy Thomas Fielding"],
+     "-": [
+       "Michael Harvey Jones",
+       "Jonathan Bales",
+       "Whitney Kelligan",
+       "Ken Thompson",
+       "Dennis Ritchie",
+       "Linus Torvalds",
+       "Rob Pike"
+     ] 
+   },
+  { "topic": "http",
+    "q": "How many logical parts maximum may an http request consist of?",
+    "th": "An http request consists of three parts: request line, headers, message body (optional). Request line consists of a verb, path, http version. Host is an obligatory header. If there is content-length in headers, you should expect a body.",
+    "+": ["3"],
+    "-": [
+      "2",
+      "4",
+      "5"
+    ]
+  }
+]
