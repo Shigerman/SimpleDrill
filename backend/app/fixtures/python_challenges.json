@@ -1,0 +1,358 @@
+[
+  {"topic": "python",
+  "q": "How many keywords are there in Python (version 3.8)?",
+  "th": "There are 35 keywords in Python (version 3.8).",
+  "+": ["35"],
+  "-": [
+    "36",
+    "33",
+    "32",
+    "31",
+    "30"]
+  },
+  { "topic": "python",
+    "q": "What statement is correct to check if a word is a keyword?",
+    "th": "To check if a word is a keyword use keyword.iskeyword('for').",
+    "+": [
+      "keyword.iskeyword('for')",
+      "'for' in keyword.kwlist"
+    ],
+    "-": [
+      "keyword.is_keyword('for')",
+      "iskeyword('for')",
+      "is_keyword('for')",
+      "keyword.iskeyword(for)",
+      "keyword.is_keyword(for)",
+      "iskeyword(for)",
+      "is_keyword(for)"
+    ]
+  },
+  { "topic": "python",
+    "q": "What is the difference between a file and a module in Python?",
+    "th": "A file is any file in an OS, while a module is an imported file with python source code.",
+    "+": ["A file is any file in an OS, while a module is an imported file with python source code"],
+    "-": [
+      "There is no difference between a file and a module",
+      "A module is a file with .py extension",
+      "A module is a file containing a python script",
+      "A file is any file in an OS, while a module is a file in a python project",
+      "A file is the same as a module, but module contains python code"
+    ]
+  },
+  { "topic": "python",
+    "q": "What indentation is recommended in Python?",
+    "th": "Specified in the PEP-8 standard. It's ideomatic for Python to write short code, so huge 4-space indentation provides a better visual separation for code blocks. Spaces are used instead of tabs in order to provide a consistent source code visual representation for different developers.",
+    "+": ["4 spaces"],
+    "-": [
+      "1 tab",
+      "2 spaces",
+      "3 spaces",
+      "6 spaces"
+    ]
+  },
+  { "topic": "python",
+    "q": "Which of these is a non-callable?",
+    "th": "The built-in callable checks if the argument is either an instance of a class with a __call__ method or is of a type that has a non null tp_call (c struct) member which indicates callability otherwise (such as in functions, methods etc.).",
+    "+": [
+      "a string",
+      "an integer",
+      "a list",
+      "a set",
+      "a dict"
+    ],
+    "-": [
+      "a class",
+      "a function",
+      "a method",
+      "a metaclass",
+      "a decorator"
+    ]
+  },
+  { "topic": "python",
+    "q": "How many loops (maximum) is it recommended to make in a list comprehension?",
+    "th": "It's recommended to make 1 loop maximum in a list comprehension for the sake of readability, though technically more loops can be done.",
+    "+": ["1"],
+    "-": [
+      "2",
+      "3",
+      "4",
+      "0"
+    ]
+  },
+  { "topic": "python",
+    "q": "Which of these is a correct list comprehension?",
+    "th": "A list comprehension is in square brackets and usually has a structure like that: [i*i for i in range(10000)].",
+    "+": ["[i*i for i in range(10000)]"],
+    "-": [
+      "(i for i in range(10000))",
+      "[x for x.upper() in fruits if 'a' in x]",
+      "[if x in 'aeiou' x for x in sentence]"
+    ]
+  },
+  { "topic": "python",
+    "q": "What’s the difference between generator expressions and list comprehensions?",
+    "th": "The generator yields one item at a time and generates item only when in demand. Whereas, in a list comprehension, Python reserves memory for the whole list.",
+    "+": ["List comprehensions have square brackets, while generators have round brackets or no brackets",
+          "List comprehensions create all items at once, while generators yield them one by one if asked"],
+    "-": [
+      "There is no difference, only the brackets",
+      "Both produce lists, but they have different order of elements",
+      "The only difference is that genrators take less memory",
+      "Generators are faster",
+      "Lists are faster"
+    ]
+  },
+  { "topic": "python",
+    "q": "What is Style Guide for Python Code called?",
+    "th": "PEP 8 gives coding conventions for the Python code comprising the standard library in the main Python distribution.",
+    "+": ["PEP 8"],
+    "-": [
+      "PyPI",
+      "Poetry",
+      "pip",
+      "flake8",
+      "pylint"
+    ]
+  },
+  { "topic": "python",
+    "q": "What is a folder?",
+    "th": "A folder is a logical concept that does not necessarily map to a physical directory. A directory is a file system object. A folder is a GUI object (aggregated object like 'recently modified files').",
+    "+": ["A folder is a logical concept that does not necessarily map to a physical directory"],
+    "-": [
+      "It's the same as a directory",
+      "It's the same as a package",
+      "It's a directory in Unix, but not in Windows",
+      "It's a directory in MacOS, but not in Linux",
+      "It is a file system object"
+    ]
+  },
+  { "topic": "python",
+    "q": "Why the 'from library import *' syntax is not recommended?",
+    "th": "The asterisk syntax creates identifiers in the global namespace referencing all exported objects from target module or package. These identifiers replace exising identifers in the global namespace and shadow identifiers in the built-in namespace.",
+    "+": [
+      "Imported names overwrite items in global and built-in namespaces",
+      "Imported name usage does not tell a story where it comes from"],
+    "-": [
+      "Importing everything uses lots of memory and other resources",
+      "It's much slower compared to individual imports",
+      "The 'from' prefix is unusual and slows down reading the code",
+      "It uses a special __all__ hook that can have side-effects",
+      "Asterisk symbol should be used only for multiplication"
+    ]
+  },
+  { "topic": "python",
+    "q": "How is this _attribute called?",
+    "th": "Attributes with one inderscore '_' at the beginning are called private attributes. They are used as a hint to other programmers not to use this attribute outside the class.",
+    "+": ["a private attribute"],
+    "-": [
+      "a magic attribute",
+      "a dunder attribute",
+      "a mangled attribute",
+      "a double dunder attribute"
+    ]
+  },
+  { "topic": "python",
+    "q": "How is this __attribute called?",
+    "th": "Attributes with two inderscores '__' at the beginning are called mangled attributes. They are used to hide the inner functionality of a class from the outside world due to autorename. When they are accessed from outside a class, there'll be an AttributeError.",
+    "+": ["a mangled attribute"],
+    "-": [
+      "a magic attribute",
+      "a dunder attribute",
+      "a private attribute",
+      "a double dunder attribute"
+    ]
+  },
+  { "topic": "python",
+    "q": "How is a method with two dunders called (like __eq__)?",
+    "th": "This convention is used for special attributes (so-called “magic methods”) such as__init__, __len__. These methods provide special syntactic features or do special things. For example, __file__ indicates the location of Python file, __eq__ is executed when a == b expression is excuted.",
+    "+": ["a magic method"],
+    "-": [
+      "a private method",
+      "a double dunder method",
+      "a first-class method"
+    ]
+  },
+  { "topic": "python",
+    "q": "What import looks best so that to have access to array from numpy library?",
+    "th": "'Import numpy as np' is the ideomatic way to make the numpy import.\n'From numpy import *' is not a good idea as short and common identifiers from numpy may overwrite identifiers in your code.\n'From numpy import array' will not tell a story where array comes from, while 'import numpy as np' and addressing it as 'np.array' tells this story explicitly.\nSo, the first variant is the best.",
+    "+": ["import numpy as np"],
+    "-": [
+      "from numpy import *",
+      "from numpy import array",
+      "import numpy.array",
+      "import numpy as 'np'",
+      "import array from numpy",
+      "import array from numpy as np"
+    ]
+  },
+  { "topic": "python",
+    "q": "How do people usually call this line of code: __init__(self): ?",
+    "th": "This line of code '__init__(self):' is usually called a class constructor.",
+    "+": [
+      "class constructor",
+      "constructor"
+    ],
+    "-": [
+      "class attribute",
+      "class initializer",
+      "class instantiator",
+      "object initializer",
+      "object instantiator",
+      "instance"
+    ]
+  },
+  { "topic": "python",
+    "q": "How would you get a list of keywords in Python?",
+    "th": "The commands to get a list of keywords in Python are: import keyword; keyword.kwlist.",
+    "+": ["import keyword; keyword.kwlist"],
+    "-": [
+      "import keywords; keyword.kwlist",
+      "keyword.kwlists; keyword.kwlist()",
+      "import kwlist; keyword.kwlist()",
+      "import kwlist; keyword()"
+    ]
+  },
+  { "topic": "python",
+    "q": "What does PEP mean?",
+    "th": "PEP means Python Enhancement Proposal.",
+    "+": ["Python Enhancement Proposal"],
+    "-": [
+      "Python Evaluation Proposal",
+      "Python Extract Procedures",
+      "Python Enclosing Procedures"
+    ]
+  },
+  { "topic": "python",
+    "q": "What flag opens a python interactive console when running a script?",
+    "th": "-i flag opens an interactive console when running a script.",
+    "+": ["-i"],
+    "-": [
+      "-v",
+      "-s",
+      "-c"
+    ]
+  },
+  { "topic": "python",
+    "q": "What is the order of imports in a python file as recommended by PEP8?",
+    "th": "PEP8-recommmended order of imports: \n1. standard library imports  \n2. third party imports  \n3. local app imports. \nThey should be devided with a blank line.",
+    "+": ["1. standard library imports\n2. third party imports\n3. local app imports"],
+    "-": [
+      "there is no definite order of imports that PEP8 recommends",
+      "1. local app imports \n2. third party imports \n3. standard library imports",
+      "1. third party imports \n2. local app imports \n3. standard library imports"
+    ]
+  },
+  { "topic": "python",
+    "q": "How is this import called:\nimport json?",
+    "th": "'import json' is called an absolute import.",
+    "+": ["absolute import"],
+    "-": [
+      "wildcard import",
+      "local app import",
+      "third party import"
+    ]
+  },
+  { "topic": "python",
+    "q": "What import is it better to avoid?",
+    "th": "Wildcard import (with asterisk *) is not recommended because its syntax creates identifiers in the global namespace referencing all exported objects from target module or package. These identifiers replace exising identifers in the global namespace and shadow identifiers in the built-in namespace.",
+    "+": ["wildcard import"],
+    "-": [
+      "absolute import",
+      "local app import",
+      "third party import"
+    ]
+  },
+  { "topic": "python",
+    "q": "What code line length is recommended for pythonistas?",
+    "th": "79 characters is the recommended code line length for pythonistas. PEP8 says so.",
+    "+": ["79"],
+    "-": [
+      "80",
+      "72",
+      "90"
+    ]
+  },
+  { "topic": "python",
+    "q": "What line length is recommended for doctrings or comments in python?",
+    "th": "For flowing long blocks of text (docstrings or comments), the line length should be limited to 72 characters. PEP8 says so.",
+    "+": ["72"],
+    "-": [
+      "78",
+      "70",
+      "80"
+    ]
+  },
+  { "topic": "python",
+    "q": "What poetry command installs numpy dependency?",
+    "th": "'poetry add numpy' command lets user install numpy dependency.",
+    "+": ["poetry add numpy"],
+    "-": [
+      "poetry install numpy",
+      "poetry add run numpty",
+      "poetry init numpy"
+    ]
+  },
+  { "topic": "python",
+    "q": "What poetry command executes a python script?",
+    "th": "'poetry run python script.py' command runs a python script.",
+    "+": ["poetry run python script.py"],
+    "-": [
+      "poetry start python script.py",
+      "run python script.py",
+      "poetry start script.py"
+    ]
+  },
+  { "topic": "pythonv",
+    "q": "What command helps to check how many identifiers refence an object?",
+    "th": "Python counts how many identifiers reference each object with the help of print(sys.getrefcount(a)) command. When reference count reaches 0, object is removed by the garbage collector.",
+    "+": ["print(sys.getrefcount(a))"],
+    "-": [
+      "print(sys.refcount(a))",
+      "print(sys.countrefobj(a))",
+      "print(sys.countref(a))"
+    ]
+  },
+  { "topic": "python",
+    "q": "What command returns the memory size of the object in bytes?",
+    "th": "'sys.getsizeof()' returns the memory size of the object in bytes.",
+    "+": ["sys.getsizeof()"],
+    "-": [
+      "sys.sizeof()",
+      "sys.memsize()",
+      "sys.getsize()"
+    ]
+  },
+  { "topic": "python",
+    "q": "What's the difference between 'type hints' and 'type annotations'?",
+    "th": "Python 3.0 introduced the 'annotation' syntax that can be used for different purposes. One such purpose is 'type annotations'. Python 3.5 introduced additional support and tooling to use type annotation for the purpose of hinting types for type checker.",
+    "+": ["Annotation syntax is used to annotate types in order to hint them"],
+    "-": [
+      "Type annotation is an idea, while type hint is it's implementation",
+      "Type hin is an idea, while type annotation is it's implementation",
+      "There is no difference, they are interchangeable in the docs"
+    ]
+  },
+  { "topic": "python",
+    "q": "How is the identifier after dot called in general in Python?",
+    "th": "'Property' is an attibute that conforms to the 'property protocol' and provides some dunder methods.",
+    "+": ["attribute"],
+    "-": [
+      "property",
+      "field",
+      "instance field"
+    ]
+  },
+  { "topic": "python",
+    "q": "How would you define an unimportant element in destructuring?",
+    "th": "An unimportant element in destructuring is defined as an underscore, for example: weight, _, length = [1, 2, 3].",
+    "+": ["_"],
+    "-": [
+      "?",
+      "&",
+      "|",
+      "x",
+      "@",
+      "%"
+    ]
+  }
+]

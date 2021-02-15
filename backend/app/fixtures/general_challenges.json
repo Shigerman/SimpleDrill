@@ -1,0 +1,331 @@
+[
+  { "topic": "general",
+    "q": "Do Gantt charts suit for planning programmer tasks?",
+    "th": "Gantt charts do not suit for planning programmer tasks, as Gantt created the charts for activities, which were previously done many times and medium performance time is known for them.",
+    "+": [
+      "No, since they rely on estimates",
+      "No, since they assume fixed requirements"
+    ],
+    "-": [
+      "Yes, sure",
+      "They were initially created for programmer tasks",
+      "They are the only hope of SCRUM masters to do their work well",
+      "Guido van Rossum recommends them a lot"
+    ]
+  },
+  { "topic": "general",
+    "q": "When should we write comments in code?",
+    "th": "It is a good idea to comment code if you write methods in libraries for outside usage and if it's difficult for you to tell a story only with identifiers and code structure.",
+    "+": [
+      "When writing libraries' methods for outside usage",
+      "When it's difficult to tell a story only with identifiers and code structure"
+    ],
+    "-": [
+      "Always. The more comments the better",
+      "You should never write comments. Let your code tell the story",
+      "Usually a comment per function",
+      "When code is difficult"
+    ]
+  },
+  { "topic": "general",
+    "q": "What question should a comment in code answer?",
+    "th": "A comment should answer the 'why' question (why you decided to write this code). The code itself answers other questions. There is no need to describe it with words additionally.",
+    "+": ["why?"],
+    "-": [
+      "what?",
+      "how long?",
+      "who?",
+      "which"
+    ]
+  },
+  { "topic": "general",
+    "q": "Why do teams use agile in their projects?",
+    "th": "Because due to a zero copy cost and no education software developers always create new software and don't know how to do it. In such situation of high uncertainty the best bet are short iterations, provided by the Agile methodology.",
+    "+": ["to guarantee a delivery"],
+    "-": [
+      "to make projects faster",
+      "to communicate better",
+      "for the sake of better planning",
+      "so that team members speaking different languages could understand each other better"
+    ]
+  },
+  { "topic": "general",
+    "q": "What key combination moves lines of code to the left in an IDE?",
+    "th": "Shift + tab combination moves lines of code to the left.",
+    "+": ["Shift + tab"],
+    "-": [
+      "Shift + Fn",
+      "Fn + tab",
+      "Alt + Fn",
+      "Ctrl + shift",
+      "Fn + Alt"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does ETL stand for?",
+    "th": "An ETL developer is a type of software engineer that manages the data Extract, Transform, and Load processes.",
+    "+": ["Extract, Transform, and Load"],
+    "-": [
+      "End, Track, and Load",
+      "Evaluate, Transform, and Locate",
+      "Evaluate, Track, and Leverage",
+      "Evaluation, Transformation, and Language"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is the prefix for custom headers?",
+    "th": "X- is the prefix for custom headers.",
+    "+": ["X-"],
+    "-": [
+      "XX-",
+        "C-",
+      "CC-",
+      "c-" 
+    ]
+  },
+  { "topic": "general",
+    "q": "What does an identifier do?",
+    "th": "An identifier references an object in memory. Several different identifiers can reference one object.",
+    "+": ["An identifier references an object in memory"],
+    "-": [
+      "An identifier is a name given to entities like class, functions, variables, etc. which differentiates one entity from another",
+      "An identifier gives a short nickname to a variable",
+      "An identifier helps the programmer to read code"
+    ]
+  },
+  { "topic": "general",
+    "q": "Which of these is a tool for documenting APIs?",
+    "th": "Swagger is an Interface Description Language for describing RESTful APIs expressed using JSON. Swagger is used together with a set of open-source software tools to design, build, document, and use RESTful web services. Swagger includes automated documentation, code generation (into many programming languages), and test-case generation.",
+    "+": ["Swagger"],
+    "-": [
+      "Docker",
+      "Graphene",
+      "DRF",
+      "uWSGI"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does FK stand for while talking about relational databases?",
+    "th": "While talking about relational databases, PK means a primary key and FK means a foreign key.",
+    "+": ["foreign key"],
+    "-": [
+      "field keyword",
+      "function key",
+      "foreign keyword",
+      "fast keep",
+      "fetch kernel",
+      "file keyword"
+    ]
+  },
+  { "topic": "general",
+    "q": "What are the tree main principles of object-oriented-programming?",
+    "th": "Polymorphism, encapsulation, and inheritance are usually given as the three fundamental principles of object-oriented methodology.",
+    "+": ["polymorphism, encapsulation, and inheritance"],
+    "-": [
+      "Polymorphism, observation, and inheritance",
+      "Abstraction, encapsulation, and inheritance",
+      "Polymorphism, encapsulation, and representation",
+      "Inheritance, separation, and application"
+    ]
+  },
+  { "topic": "general",
+    "q": "What book did the Gang of Four write in 1994 and what topic does it explore?",
+    "th": "Design Patterns: Elements of Reusable Object-Oriented Software (1994) is a software engineering book describing software design patterns. The book was written by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides, with a foreword by Grady Booch. The book is divided into two parts, with the first two chapters exploring the capabilities and pitfalls of object-oriented programming, and the remaining chapters describing 23 classic software design patterns. The book includes examples in C++ and Smalltalk.",
+    "+": ["Design Patterns, object-oriented programming"],
+    "-": [
+      "Pitfalls of object-oriented programming, object-oriented programming",
+      "Software, objects in Python",
+      "Three patterns, instantiating and initialization"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does DSL stand for?",
+    "th": "DSL (domain specific language) is a language specifically created for a domain field, for example: numpy vs Python, rails vs ruby. Many frameworks and libraries have their own DSL.",
+    "+": ["domain specific language"],
+    "-": [
+      "driven secure layout",
+      "domain specific legacy",
+      "domain secret language",
+      "distribution specific language",
+      "domain specific layout",
+      "domain specific location"
+    ]
+  },
+  { "topic": "general",
+    "q": "Which of these is both a table and a character encoding?",
+    "th": "ASCII (American Standard Code for Information Interchange, 1960) is both a table and a character encoding. It is a subset of the Unicode.",
+    "+": ["ASCII"],
+    "-": [
+      "Unicode",
+      "UTF-8",
+      "ASCII API"
+    ]
+  },
+  { "topic": "general",
+    "q": "How many characters are there in ASCII?",
+    "th": "Originally based on the English alphabet, ASCII encodes 128 specified characters into seven-bit integers.",
+    "+": ["128"],
+    "-": [
+      "127",
+      "256",
+      "218"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is the Unicode?",
+    "th": "The Unicode is an IT standard for the consistent encoding, representation, and handling of text expressed in most of the world's writing systems. The standard is maintained by the Unicode Consortium, and as of March 2020, there is a total of 143,859 characters. ASCII is its subset.",
+    "+": ["a table"],
+    "-": [
+      "a character encoding",
+      "a table and a character encoding",
+      "an API standard"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is UTF-8?",
+    "th": "UTF-8 is the most successful character encoding for the Unicode (they go together).",
+    "+": ["a character encoding"],
+    "-": [
+      "a table",
+      "a table and an encoding standard",
+      "an API standard"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is JSON (JavaScript Object Notation)?",
+    "th": "JSON is a language-independent data format.",
+    "+": ["a language-independent data format"],
+    "-": [
+      "a virtual environment",
+      "a global namespace",
+      "object-oriented programming pattern"
+    ]
+  },
+  { "topic": "general",
+    "q": "What command deactivates a virtual environment?",
+    "th": "Activating virtual environment adds 'deactivate' function to the current shell (like bash) to deactivate it. Calling a function in most shells is just entering its name followed by enter.",
+    "+": ["deactivate"],
+    "-": [
+      "delete",
+      "turn off",
+      "switch",
+      "shut",
+      "disconnect",
+      "disable",
+      "remove",
+      "desactivate"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does 'i' mean in 'for i in my_list:'?",
+    "th": "'i' means 'index' in loops",
+    "+": ["'i' means 'index'"],
+    "-": [
+      "'i' means 'indefinite'",
+      "'i' means 'indentation'",
+      "'i' means 'invalid'",
+      "'i' means 'iteration'"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does '_' mean in 'for _ in my_list:'?",
+    "th": "'_' means that the index will not be used",
+    "+": ["'_' means that the index will not be used"],
+    "-": [
+      "'_' means 'indefinite'",
+      "'_' means an empty string",
+      "'_' means 'None'",
+      "'_' means a private identifier in this loop"
+    ]
+  },
+  { "topic": "general",
+    "q": "What does 'v' mean in 'for v in my_list:'?",
+    "th": "'v' means a variable in loops, compared to 'i' meaning an index and '_' meaning that the index will not be used.",
+    "+": ["'v' means 'variable'"],
+    "-": [
+      "'v' means 'word'",
+      "'v' means 'value'",
+      "'v' means 'venv'",
+      "'v' means 'virtual'"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is the main thing a programmer should think about when coding in Python?",
+    "th": "Code readability is above everything else.",
+    "+": ["Code readability"],
+    "-": [
+      "Do not use 'i' in for-loops",
+      "Functions should not be longer than 7 lines",
+      "Saving lines is good. Less lines, less effort to read",
+      "The more functions there are in code, the better"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is really good about the Poetry tool?",
+    "th": "Poetry: 1) Provides a way to separate direct dependencies from transitive dependencies, which 'pip' lacks 2) Provides a way to auto-use virtual environments via 'run' command which 'virtualenv' lacks.",
+    "+": ["Poetry is good at deleting dependencies"],
+    "-": [
+      "Poetry can be used in a virtual environment",
+      "Poetry is installed into home directory",
+      "Only the last version of Poetry can be installed",
+      "Poetry installs all dependencies in no time "
+    ]
+  },
+  { "topic": "general",
+    "q": "Why are there two back slashes in the path 'E:\\\\myuser'?",
+    "th": "In Python strings, the backslash \\ is a special character, also called the 'escape' character. Prefixing it or another special character with a backslash turns it into an ordinary character. This is called 'escaping'.",
+    "+": ["One back slash is prefixed by the other to make it an ordinary character"],
+    "-": [
+      "Because it's always like that at the beginning of the path",
+      "This path skipped some directories between the root and myuser",
+      "It shows that it's a directory, but not a file",
+      "It shows that it's a file, but not a directory"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is the difference between a directory and a package?",
+    "th": "A directory is an operation system object containing files, while a package is an imported directory.",
+    "+": ["A directory is an OS object, while a package is an imported directory"],
+    "-": [
+      "There is no difference between a directory and a package",
+      "A package is a directory containing .py files",
+      "A package is a directory containing a python script",
+      "A directory is any directory in an OS, while a package is a directory in a python project",
+      "A directory is the same as a package, but a package contains at least one python file"
+    ]
+  },
+  { "topic": "general",
+    "q": "What is the difference between a module and a script in Python?",
+    "th": "A module is an IMPORTED Python file, a script is a starting point of the project, a file with Python code that is called when running a project, more often than not it contains 'if __main__ == __name__' line.",
+    "+": ["A module is an imported Python file, a script is a starting point of the application"],
+    "-": [
+      "A module is any Python file, and a script is a Python file, usually very short and doing something very simple",
+      "There is no difference between a module and a script",
+      "A module is a file with .py extension, while a script can have other extensions",
+      "A module is a file containing a python script"
+    ]
+  },
+  { "topic": "general",
+    "q": "In what case does garbage collector delete an object?",
+    "th": "Python counts how many identifiers reference each object. When reference count reaches 0, object is removed by the garbage collector (like langoliers in Stephen King's novel).",
+    "+": ["there are no references from the global namespace to the object"],
+    "-": [
+      "an identifier does not correspond to any value in memory",
+      "object is no longer used",
+      "object does not reference anything",
+      "less than 2 references remain for an object",
+      "memory is full"
+    ]
+  },
+  { "topic": "general",
+    "q": "What style is used in this identifier: MyClass?",
+    "th": "PascalCase is the correct answer. PascalCase is a naming convention in which the first letter of each word in a compound word is capitalized.",
+    "+": ["pascal case"],
+    "-": [
+      "camel case",
+      "snake case",
+      "kebab case"
+    ]
+  }
+]
+  
