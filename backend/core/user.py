@@ -13,12 +13,12 @@ class User:
             raise LookupError(f"User with id {user_id} not in DB") from ex
 
     @staticmethod
-    def register(login: str, password: str, invite: str) -> Person:
+    def register(username: str, password: str, invite: str) -> Person:
         pass
 
 
     @staticmethod
-    def login(login: str, password: str) -> Person:
+    def login(username: str, password: str) -> Person:
         pass
     
 

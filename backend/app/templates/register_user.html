@@ -2,49 +2,72 @@
 
 {% block body %}
 
-<nu-flex flow="column" content="center">
-    <nu-flex content="center" height="30">
-        <nu-flex flow="column" content="center" width="60">
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        btn_register = document.getElementById("register_me");
+        btn_register.addEventListener("input", (e) => {
+            console.log(e.detail);
+            const args = Object.entries(e.detail).map(([key, val]) => {
+                return `${encodeURIComponent(key)}=${encodeURIComponent(val)}`;
+            }).join("&");
+            window.location.href = `?${args}`;
+        });
+    });
+</script>
 
-            <nu-flex flow="row-reverse" content="start" height="6">
-                <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="/login_user"> </a> Login
-                </nu-btn>
+<nu-root>
+    <nu-flex flow="column" content="center">
+        <nu-flex content="center" height="30">
+            <nu-flex flow="column" content="center" width="60">
+
+                <nu-form id="register_me">
+                    <nu-flex flow="row" content="center" items="center">
+                        <nu-card height="4" width="15" place="center">
+                            <p> User name: </p>
+                        </nu-card>
+
+                        <nu-flex flow="row wrap" gap>
+                            <nu-input id="username" height="4" width="15"></nu-input>
+                        </nu-flex>
+                    </nu-flex>
+
+                    <br></br>
+
+                    <nu-flex flow="row" content="center" items="center">
+                        <nu-card height="4" width="15" place="center">
+                            <p> Password: </p>
+                        </nu-card>
+
+                        <nu-flex flow="row wrap" gap>
+                            <nu-input id="password" height="4" width="15"></nu-input>
+                        </nu-flex>
+                    </nu-flex>
+
+                    <br></br>
+
+                    <nu-flex flow="row" content="center" items="center">
+                        <nu-card height="4" width="15" place="center">
+                            <p> Invitation code: </p>
+                        </nu-card>
+
+                        <nu-flex flow="row wrap" gap>
+                            <nu-input id="invite_code" height="4" width="15"></nu-input>
+                        </nu-flex>
+                    </nu-flex>
+
+                    <br></br>
+
+                    <nu-flex flow="column" items="center" width="60">
+                        <nu-btn special action="submit" height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">
+                            Register 
+                        </nu-btn>
+                    </nu-flex>
+                </nu-form>
+
             </nu-flex>
-
-
-            <nu-flex flow="row" content="center" items="center">
-                <nu-card height="4" width="15" place="center">
-                    <p> User name: </p>
-                </nu-card>
-
-                <nu-flex flow="row wrap" gap>
-                    <nu-input id="user_name" height="4" width="15"></nu-input>
-                </nu-flex>
-            </nu-flex>
-
-            <br></br>
-
-            <nu-flex flow="row" content="center" items="center">
-                <nu-card height="4" width="15" place="center">
-                    <p> Password: </p>
-                </nu-card>
-
-                <nu-flex flow="row wrap" gap>
-                    <nu-input id="password" height="4" width="15"></nu-input>
-                </nu-flex>
-            </nu-flex>
-
-            <br></br>
-
-            <nu-flex flow="column" items="center" width="60">
-                <nu-btn height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">
-                    Register 
-                </nu-btn>
-            </nu-flex>
-
         </nu-flex>
     </nu-flex>
-</nu-flex>
+</nu-root>
+
 
 {% endblock %}

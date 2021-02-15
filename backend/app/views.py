@@ -7,7 +7,22 @@ def homepage(request):
 
 
 def register_user(request):
-    context = {}
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+    invite = request.GET.get('invite')
+    context = {'username': username,
+               'password': password,
+               'invite': invite}
+    if email and password and invite:
+        code_to_check = Invite.objects.get(code=invite)
+        try:
+            if not code_to_check.used_by:
+                code_to_check.used_by = user.db
+                code_to_check.save()
+                return response
+        except:  # need to add an exception here
+            user = User.objects.register(username, password, invite)
+            return render(request, 'register_user.html', {"invalid_code": True})
     return render(request, 'register_user.html', context)
 
 
