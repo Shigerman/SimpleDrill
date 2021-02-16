@@ -7,16 +7,16 @@ class Person(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # If user answered challenge wrongly or issued the "I don't know"
     # command, disclose answers until the "next challenge" command.
-    disclose_answers = models.BooleanField(default=False)
-    challenge_topic = models.TextField(default="")
+    disclose_answers = models.BooleanField(null=True)
+    challenge_topic = models.TextField(null=True)
 
 
 class Invite(models.Model):
     code = models.TextField(default="")
-    inviter = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='invite_issuer')
-    used_by = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='invite_taker')
+    inviter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invite_issuer')
+    used_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invite_taker', blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
-    comment = models.TextField(default="")
+    comment = models.TextField(default="", null=True)
 
 
 class TestStep(models.Model):

@@ -1,5 +1,8 @@
-from backend.app.models import Person
-from .. import core
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+
+from backend.app.models import Invite, Person
+from backend.app import views
 
 
 class User:
@@ -14,12 +17,30 @@ class User:
 
     @staticmethod
     def register(username: str, password: str, invite: str) -> Person:
-        pass
-
+        # TODO: check invite
+        code_to_check = Invite.objects.get(code=invite)
+        try:
+            if not code_to_check.used_by:
+                code_to_check.used_by = user.db
+                code_to_check.save()
+            user = Person.objects.create_user(name, password)
+            person = User.objects.create(user=user)
+            user.save()
+            person.save()
+            return Person
+        except DoesNotExist:  # check exception
+            return views.render_register_user(context, {"invalid_code": True})
+        
 
     @staticmethod
     def login(username: str, password: str) -> Person:
-        pass
+        user = authenticate(username=username, password=password)
+        if not user:
+            return # TODO: do something
+        person = Person.objects.get(user=user)
+        assert person
+        views.connect_person_to_session(person)
+        return # TODO: logged in
     
 
     def logout(self):
