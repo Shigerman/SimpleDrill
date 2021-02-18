@@ -1,33 +1,41 @@
-from django.shortcuts import render
-from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
 from threadlocals.threadlocals import get_current_request
-from .. import core
+
+from backend import core
+from .models import Person, Invite
 
 
 def homepage(request):
-    context = {}
-    return render(request, 'homepage.html', context)
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    return render(request, 'homepage.html')
 
 
-def register_user(request):
+def render_homepage():
     context = {}
+    return render(get_current_request(), 'homepage.html', context)
+
+
+def register_visitor(request):
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+    invite = request.GET.get('invite')
     if username and password and invite:
-        return core.user.User.register(username, password, invite)
-    return render(request, 'register_user.html', context)
+        return core.visitor.Visitor.register(username, password, invite)
+    return render(request, 'register_visitor.html')
 
 
 def connect_person_to_session(person):
     login(get_current_request(), person.user)
 
 
-def render_register_user(request, invalid_code=False):
-    username = request.GET.get('username')
-    password = request.GET.get('password')
-    invite = request.GET.get('invite')
-    context = {'username': username, 'password': password, 'invite': invite}
+def render_register_visitor(request, invalid_code=False):
+    context = {"invalid_code": True}
+    return render(get_current_request(), 'register_visitor.html', context)
 
 
-def login_user(request):
+def login_visitor(request):
     context = {}
     return render(request, 'login_user.html', context)
 
@@ -50,6 +58,3 @@ def explain_test(request):
 def test(request):
     context = {}
     return render(request, 'test.html', context)
-
-
-

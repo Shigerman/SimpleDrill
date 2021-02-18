@@ -17,7 +17,7 @@
 
 <nu-root>
     <nu-flex flow="column" content="center">
-        <nu-flex content="center" height="30">
+        <nu-flex content="center" height="40">
             <nu-flex flow="column" content="center" width="60">
 
                 <nu-form id="register_me">
@@ -51,9 +51,19 @@
                         </nu-card>
 
                         <nu-flex flow="row wrap" gap>
-                            <nu-input id="invite_code" height="4" width="15"></nu-input>
+                            <nu-input id="invite" height="4" width="15"></nu-input>
                         </nu-flex>
                     </nu-flex>
+
+                    <br></br>
+
+                    {% if invalid_code %}
+                    <nu-flex flow="row" content="center" items="center">
+                        <nu-card fill="hue(12)" color="white">
+                            Invalid code. Try again or get a valid invitation code.
+                        </nu-card>
+                    </nu-flex>
+                    {% endif %}
 
                     <br></br>
 
