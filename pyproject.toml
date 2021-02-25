@@ -11,6 +11,7 @@ python-dotenv = "^0.15.0"
 django-threadlocals = "^0.10"
 
 [tool.poetry.dev-dependencies]
+mypy = "^0.800"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

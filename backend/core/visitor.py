@@ -10,10 +10,10 @@ class Visitor:
 
     def __init__(self, user: User):
         try:
-            self.id = user_id
+            self.id = user.id
             self.person = Person.objects.get(user=user)
         except Person.DoesNotExist as ex:
-            raise LookupError(f"User with id {user_id} not in DB") from ex
+            raise LookupError(f"User with id {user.id} not in DB") from ex
 
 
     @staticmethod
@@ -38,15 +38,15 @@ class Visitor:
     def login(username: str, password: str):
         user = authenticate(username=username, password=password)
         if not user:
-            return # TODO: do something
+            return views.render_login_visitor({"invalid_credentials": True})
         person = Person.objects.get(user=user)
         assert person
         views.connect_person_to_session(person)
-        return # TODO: logged in
+        return views.login_visitor()
 
 
     def logout(self):
-        pass
+        return views.logout_visitor()
 
 
     def want_test(self):

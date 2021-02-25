@@ -31,13 +31,23 @@ def connect_person_to_session(person):
 
 
 def render_register_visitor(request, invalid_code=False):
-    context = {"invalid_code": True}
+    context = {"invalid_code": invalid_code}
     return render(get_current_request(), 'register_visitor.html', context)
 
 
 def login_visitor(request):
-    context = {}
-    return render(request, 'login_user.html', context)
+    return render(request, 'login_visitor.html')
+
+
+def render_login_visitor(request, invalid_credentials=False):
+    context = {"invalid_credentials": invalid_credentials}
+    return render(request, 'login_visitor.html', context)
+
+
+def logout_visitor(request):
+    if request.user.is_authenticated:
+        logout(get_current_request(), person.visitor)
+    return render(request, 'login_visitor.html', {}) 
 
 
 def select_topic(request):
