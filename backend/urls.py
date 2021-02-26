@@ -22,6 +22,8 @@ app_name = 'app'
 urlpatterns = [
     path('', backend.app.views.homepage),
     path('register_visitor/', backend.app.views.register_visitor),
+    path('view_invites/', backend.app.views.view_invites),
+    path('add_invite/', backend.app.views.add_invite),
     path('login_visitor/', backend.app.views.login_visitor),
     path('select_topic/', backend.app.views.select_topic),
     path('drill_topic/', backend.app.views.drill_topic),

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block body %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("add_comment_form");
+    console.assert(form);
+    form.addEventListener("input", e => {
+      const paramsFromJson =
+        Object.entries(e.detail)
+        .map(pair => pair.map(name => encodeURIComponent(name)))
+        .map(pair => pair.join("=")).join("&")
+      window.location.href = "/add_invite?" + paramsFromJson;
+    });
+  });
+</script>
+
+<nu-root>
+  <nu-flex content="center">
+    <nu-flex flow="column" width="60">
+
+      <nu-form id="add_comment_form" padding="1em 0 0 0">
+        <nu-flex>
+          <nu-input id="comment" placeholder="Comment"></nu-input>
+          <nu-btn special action="submit">Add</nu-btn>
+        </nu-flex>
+      </nu-form>
+
+      {% if invites %}
+      <nu-table>
+
+        <nu-rowgroup>
+          <nu-row>
+            <nu-columnheader>Inviter</nu-columnheader>
+            <nu-columnheader>Date</nu-columnheader>
+            <nu-columnheader>Comment</nu-columnheader>
+            <nu-columnheader>Used by</nu-columnheader>
+            <nu-columnheader>Code</nu-columnheader>
+          </nu-row>
+        </nu-rowgroup>
+
+        <nu-rowgroup>
+          {% for invite in invites %}
+          <nu-row>
+            <nu-cell>{{invite.inviter}}</nu-cell>
+            <nu-cell>{{invite.date}}</nu-cell>
+            <nu-cell>{{invite.comment}}</nu-cell>
+            <nu-cell>{{invite.used_by}}</nu-cell>
+            <nu-cell>{{invite.code}}</nu-cell>
+          </nu-row>
+          {% endfor %}
+        </nu-rowgroup>
+
+      </nu-table>
+      {% else %}
+      <nu-card>No invites</nu-card>
+      {% endif %}
+    </nu-flex>
+  </nu-flex>
+</nu-root>
+{% endblock %}

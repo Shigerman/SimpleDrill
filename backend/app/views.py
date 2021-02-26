@@ -35,6 +35,11 @@ def render_register_visitor(request, invalid_code=False):
     return render(get_current_request(), 'register_visitor.html', context)
 
 
+def render_invites(invites):
+    context = {'invites': invites,}
+    return render(get_current_request(), 'view_invites.html', context)
+
+
 def login_visitor(request):
     return render(request, 'login_visitor.html')
 
@@ -47,7 +52,7 @@ def render_login_visitor(request, invalid_credentials=False):
 def logout_visitor(request):
     if request.user.is_authenticated:
         logout(get_current_request(), person.visitor)
-    return render(request, 'login_visitor.html', {}) 
+    return render(request, 'login_visitor.html', {})
 
 
 def select_topic(request):
@@ -68,3 +73,6 @@ def explain_test(request):
 def test(request):
     context = {}
     return render(request, 'test.html', context)
+
+
+

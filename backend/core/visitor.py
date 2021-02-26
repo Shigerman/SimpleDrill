@@ -1,5 +1,8 @@
+from uuid import uuid4
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 
 from backend.app.models import Invite, Person
 from backend.app import views
@@ -42,7 +45,27 @@ class Visitor:
         person = Person.objects.get(user=user)
         assert person
         views.connect_person_to_session(person)
-        return views.login_visitor()
+        return redirect("/login_visitor")
+
+
+    def show_invites(self):
+        if not self.user.is_staff:
+            return redirect("/login_visitor")
+
+        invites = Invite.objects.all()
+        return views.render_invites(invites)
+
+
+    def add_invite(self, comment):
+        if not self.user.is_staff:
+            return redirect("/login_visitor")
+
+        invite = Invite.objects.create(
+            inviter = self.user,
+            comment = comment,
+            code = uuid4().hex).save()
+
+        return self.show_invites()
 
 
     def logout(self):
