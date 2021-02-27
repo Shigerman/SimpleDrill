@@ -1,6 +1,7 @@
+import urllib
 from uuid import uuid4
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 
@@ -22,6 +23,13 @@ class Visitor:
     @staticmethod
     def register(username: str, password: str, invite: str):
         try:
+            if None in (username, password, invite):
+                return views.render_register_visitor({})
+
+            username = urllib.parse.unquote(username)
+            password = urllib.parse.unquote(password)
+            invite = urllib.parse.unquote(invite)
+
             code_to_check = Invite.objects.get(code=invite)
             if not code_to_check.used_by:
                 user = User.objects.create(username=username, password=password)
@@ -39,13 +47,20 @@ class Visitor:
 
     @staticmethod
     def login(username: str, password: str):
+        if None in (username, password):
+            return views.render_login_visitor({})
+
+        username = urllib.parse.unquote(username)
+        password = urllib.parse.unquote(password)
         user = authenticate(username=username, password=password)
+
         if not user:
             return views.render_login_visitor({"invalid_credentials": True})
+        login(request, user)
         person = Person.objects.get(user=user)
         assert person
         views.connect_person_to_session(person)
-        return redirect("/login_visitor")
+        return views.render_homepage()
 
 
     def show_invites(self):

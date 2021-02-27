@@ -40,7 +40,29 @@ def render_invites(invites):
     return render(get_current_request(), 'view_invites.html', context)
 
 
+def view_invites(request):
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    visitor = core.Visitor(user=request.user)
+    return visitor.show_invites()
+
+
+def add_invite(request):
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    visitor = core.Visitor(user=request.user)
+    comment = request.GET.get('comment')
+    if not comment:
+        return redirect("/view_invites")
+    visitor.add_invite(comment=comment)
+    return visitor.show_invites()
+
+
 def login_visitor(request):
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+    if username and password:
+        return core.visitor.Visitor.login(username, password)
     return render(request, 'login_visitor.html')
 
 
@@ -73,6 +95,3 @@ def explain_test(request):
 def test(request):
     context = {}
     return render(request, 'test.html', context)
-
-
-
