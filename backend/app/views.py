@@ -1,3 +1,5 @@
+import urllib
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from threadlocals.threadlocals import get_current_request
@@ -12,7 +14,7 @@ def homepage(request):
     return render(request, 'homepage.html')
 
 
-def render_homepage():
+def render_homepage(person):
     context = {}
     return render(get_current_request(), 'homepage.html', context)
 
@@ -21,6 +23,14 @@ def register_visitor(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
     invite = request.GET.get('invite')
+
+    if None in (username, password, invite):
+        return render_register_visitor({})
+
+    username = urllib.parse.unquote(username)
+    password = urllib.parse.unquote(password)
+    invite = urllib.parse.unquote(invite)
+
     if username and password and invite:
         return core.visitor.Visitor.register(username, password, invite)
     return render(request, 'register_visitor.html')
@@ -28,6 +38,10 @@ def register_visitor(request):
 
 def connect_person_to_session(person):
     login(get_current_request(), person.user)
+
+
+def disconnect_person_from_session(person):
+    logout(get_current_request(), person.visitor)
 
 
 def render_register_visitor(request, invalid_code=False):
@@ -61,20 +75,28 @@ def add_invite(request):
 def login_visitor(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
+
+    if None in (username, password):
+        return render_login_visitor(request)
+
+    username = urllib.parse.unquote(username)
+    password = urllib.parse.unquote(password)
+
     if username and password:
         return core.visitor.Visitor.login(username, password)
     return render(request, 'login_visitor.html')
 
 
+def logout_visitor(request):
+    if not request.user.is_authenticated:
+        return redirect("/")
+    visitor = core.Visitor(user=request.user)
+    return visitor.logout()
+
+
 def render_login_visitor(request, invalid_credentials=False):
     context = {"invalid_credentials": invalid_credentials}
     return render(request, 'login_visitor.html', context)
-
-
-def logout_visitor(request):
-    if request.user.is_authenticated:
-        logout(get_current_request(), person.visitor)
-    return render(request, 'login_visitor.html', {})
 
 
 def select_topic(request):

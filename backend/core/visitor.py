@@ -4,6 +4,7 @@ from uuid import uuid4
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
+from threadlocals.threadlocals import get_current_request
 
 from backend.app.models import Invite, Person
 from backend.app import views
@@ -23,13 +24,6 @@ class Visitor:
     @staticmethod
     def register(username: str, password: str, invite: str):
         try:
-            if None in (username, password, invite):
-                return views.render_register_visitor({})
-
-            username = urllib.parse.unquote(username)
-            password = urllib.parse.unquote(password)
-            invite = urllib.parse.unquote(invite)
-
             code_to_check = Invite.objects.get(code=invite)
             if not code_to_check.used_by:
                 user = User.objects.create(username=username, password=password)
@@ -38,7 +32,7 @@ class Visitor:
                 person.save()
                 code_to_check.used_by = user
                 code_to_check.save()
-                return views.render_homepage()
+                return redirect("/")
             else:
                 return views.render_register_visitor({"invalid_code": True})
         except Invite.DoesNotExist:
@@ -47,16 +41,9 @@ class Visitor:
 
     @staticmethod
     def login(username: str, password: str):
-        if None in (username, password):
-            return views.render_login_visitor({})
-
-        username = urllib.parse.unquote(username)
-        password = urllib.parse.unquote(password)
         user = authenticate(username=username, password=password)
-
         if not user:
             return views.render_login_visitor({"invalid_credentials": True})
-        login(request, user)
         person = Person.objects.get(user=user)
         assert person
         views.connect_person_to_session(person)
@@ -84,7 +71,8 @@ class Visitor:
 
 
     def logout(self):
-        return views.logout_visitor()
+        views.disconnect_person_from_session(self.person)
+        return redirect("/")
 
 
     def want_test(self):
