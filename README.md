@@ -37,3 +37,9 @@ Command to run the tests:
 ```
 poetry run python manage.py test backend
 ```
+
+### creating admins
+```
+poetry rum python manage.py createsuperuser
+poetry run python manage.py createperson
+```
