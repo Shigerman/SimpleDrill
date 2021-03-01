@@ -1,7 +1,7 @@
 import urllib
 
+import django.contrib.auth
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
 from threadlocals.threadlocals import get_current_request
 
 from backend import core
@@ -14,7 +14,7 @@ def homepage(request):
     return render(request, 'homepage.html')
 
 
-def render_homepage(person):
+def render_homepage():
     context = {}
     return render(get_current_request(), 'homepage.html', context)
 
@@ -37,11 +37,11 @@ def register_visitor(request):
 
 
 def connect_person_to_session(person):
-    login(get_current_request(), person.user)
+    django.contrib.auth.login(get_current_request(), person.user)
 
 
 def disconnect_person_from_session(person):
-    logout(get_current_request(), person.visitor)
+    django.contrib.auth.logout(get_current_request())
 
 
 def render_register_visitor(request, invalid_code=False):
@@ -50,15 +50,14 @@ def render_register_visitor(request, invalid_code=False):
 
 
 def render_invites(invites):
-    context = {'invites': invites,}
+    context = {'invites': invites}
     return render(get_current_request(), 'view_invites.html', context)
 
 
 def view_invites(request):
     if not request.user.is_authenticated:
         return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
-    return visitor.show_invites()
+    return core.visitor.Visitor.show_invites(get_current_request())
 
 
 def add_invite(request):
@@ -67,7 +66,7 @@ def add_invite(request):
     visitor = core.Visitor(user=request.user)
     comment = request.GET.get('comment')
     if not comment:
-        return redirect("/view_invites")
+        return redirect("view_invites")
     visitor.add_invite(comment=comment)
     return visitor.show_invites()
 
@@ -75,14 +74,14 @@ def add_invite(request):
 def login_visitor(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
-
-    if None in (username, password):
-        return render_login_visitor(request)
-
-    username = urllib.parse.unquote(username)
-    password = urllib.parse.unquote(password)
-
+ 
+    if username is None and password:
+        return render_login_visitor({"invalid_credentials": True})
+    elif username and password is None:
+        return render_login_visitor({"invalid_credentials": True})
     if username and password:
+        username = urllib.parse.unquote(username)
+        password = urllib.parse.unquote(password)
         return core.visitor.Visitor.login(username, password)
     return render(request, 'login_visitor.html')
 
@@ -90,13 +89,13 @@ def login_visitor(request):
 def logout_visitor(request):
     if not request.user.is_authenticated:
         return redirect("/")
-    visitor = core.Visitor(user=request.user)
+    visitor = core.visitor.Visitor(user=request.user)
     return visitor.logout()
 
 
-def render_login_visitor(request, invalid_credentials=False):
+def render_login_visitor(invalid_credentials=False):
     context = {"invalid_credentials": invalid_credentials}
-    return render(request, 'login_visitor.html', context)
+    return render(get_current_request(), 'login_visitor.html', context)
 
 
 def select_topic(request):

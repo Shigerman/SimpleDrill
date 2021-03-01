@@ -26,12 +26,14 @@ class Visitor:
         try:
             code_to_check = Invite.objects.get(code=invite)
             if not code_to_check.used_by:
-                user = User.objects.create(username=username, password=password)
+                user = User.objects.create_user(
+                    username, email := None, password)
                 person = Person.objects.create(user=user)
                 user.save()
                 person.save()
                 code_to_check.used_by = user
                 code_to_check.save()
+                views.connect_person_to_session(person)
                 return redirect("/")
             else:
                 return views.render_register_visitor({"invalid_code": True})

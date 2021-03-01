@@ -32,10 +32,10 @@
         <nu-rowgroup>
           <nu-row>
             <nu-columnheader>Inviter</nu-columnheader>
-            <nu-columnheader>Date</nu-columnheader>
             <nu-columnheader>Comment</nu-columnheader>
             <nu-columnheader>Used by</nu-columnheader>
             <nu-columnheader>Code</nu-columnheader>
+            <nu-columnheader>Date</nu-columnheader>
           </nu-row>
         </nu-rowgroup>
 
@@ -43,10 +43,10 @@
           {% for invite in invites %}
           <nu-row>
             <nu-cell>{{invite.inviter}}</nu-cell>
-            <nu-cell>{{invite.date}}</nu-cell>
             <nu-cell>{{invite.comment}}</nu-cell>
             <nu-cell>{{invite.used_by}}</nu-cell>
             <nu-cell>{{invite.code}}</nu-cell>
+            <nu-cell>{{invite.date}}</nu-cell>
           </nu-row>
           {% endfor %}
         </nu-rowgroup>

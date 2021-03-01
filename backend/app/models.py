@@ -10,6 +10,9 @@ class Person(models.Model):
     disclose_answers = models.BooleanField(null=True)
     challenge_topic = models.TextField(null=True)
 
+    def __str__(self):
+        return f"{self.user.username} admin {self.user.is_staff}"
+
 
 class Invite(models.Model):
     code = models.TextField(default="")
@@ -17,6 +20,9 @@ class Invite(models.Model):
     used_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invite_taker', blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
     comment = models.TextField(default="", null=True)
+
+    def __str__(self):
+        return f"\"{self.comment}\" used by {self.used_by}"
 
 
 class TestStep(models.Model):
