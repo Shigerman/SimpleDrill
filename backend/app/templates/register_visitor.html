@@ -17,7 +17,7 @@
 
 <nu-root>
     <nu-flex flow="column" content="center">
-        <nu-flex content="center" height="40">
+        <nu-flex content="center" height="41">
             <nu-flex flow="column" content="center" width="60">
 
                 <nu-flex flow="row-reverse" content="start" height="6">
@@ -68,9 +68,17 @@
                             Invalid code. Try again or get a valid invitation code.
                         </nu-card>
                     </nu-flex>
+                    <br></br>
                     {% endif %}
 
+                    {% if empty_field %}
+                    <nu-flex flow="row" content="center" items="center">
+                        <nu-card fill="hue(12)" color="white">
+                            Empty field. Try again and enter your data.
+                        </nu-card>
+                    </nu-flex>
                     <br></br>
+                    {% endif %}
 
                     <nu-flex flow="column" items="center" width="60">
                         <nu-btn special action="submit" height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">

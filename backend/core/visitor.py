@@ -36,24 +36,26 @@ class Visitor:
                 views.connect_person_to_session(person)
                 return redirect("/")
             else:
-                return views.render_register_visitor({"invalid_code": True})
+                return views.render_register_visitor(
+                    empty_field=False, invalid_code=True)
         except Invite.DoesNotExist:
-            return views.render_register_visitor({"invalid_code": True})
+            return views.render_register_visitor(
+                    empty_field=False, invalid_code=True)
 
 
     @staticmethod
     def login(username: str, password: str):
         user = authenticate(username=username, password=password)
         if not user:
-            return views.render_login_visitor({"invalid_credentials": True})
+            return views.render_login_visitor(invalid_credentials=True)
         person = Person.objects.get(user=user)
         assert person
         views.connect_person_to_session(person)
-        return views.render_homepage()
+        return redirect("/")
 
 
     def show_invites(self):
-        if not self.user.is_staff:
+        if not self.person.user.is_staff:
             return redirect("/login_visitor")
 
         invites = Invite.objects.all()
@@ -61,11 +63,11 @@ class Visitor:
 
 
     def add_invite(self, comment):
-        if not self.user.is_staff:
+        if not self.person.user.is_staff:
             return redirect("/login_visitor")
 
         invite = Invite.objects.create(
-            inviter = self.user,
+            inviter = self.person.user,
             comment = comment,
             code = uuid4().hex).save()
 
