@@ -59,4 +59,4 @@ class CurrentAnswers(models.Model):
 class ChallengeSummary(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    failed_count = models.IntegerField(default=0)
+    asked_count = models.IntegerField(default=1)

@@ -83,6 +83,62 @@ class Visitor:
         pass
 
 
+    def show_test_explanation(self):
+        user_challenges_count = count_user_challenges(self)
+        countdown = get_countdown_to_final_test(self)
+
+        start_test_score, final_test_score = count_test_score(self)
+        Explanation = namedtuple('Explanation', 'text page_to_go_to')
+
+        if not user_challenges_count and not user_did_start_test(self):
+            text = ("We recommend that you take our test before you start" +
+                " Python drills.")
+            page_to_go_to = "/test"
+        elif countdown > 0:
+            text = (f"Your start test score: {start_test_score}.\nAfter doing " +
+                f"{countdown} drills you will be able to take the test again."
+                +"\nGo and practice!")
+            page_to_go_to = "/select_topic"
+        elif user_did_final_test(self):
+            text = ("Congratulations!\nYou have completed all the tests."
+                + f"\nYour start test score: {start_test_score}.\nYour final "
+                +f"test score: {final_test_score}.\nGo and practice more!")
+            page_to_go_to = "/select_topic"
+        else:
+            text = ("You have done a lot of drilling.\n" +
+                "It is time to take your final test.")
+            page_to_go_to = "/test"
+        test_explanation = Explanation(text,page_to_go_to)
+        return views.render_explain_test(test_explanation)
+
+
+    def count_user_challenges(self):
+        challenges = ChallengeSummary.objects.filter(user=self.person.user)
+        challenges = [challenge.asked_count for challenge in challenges]
+        return sum(challenges)
+
+
+    def get_target_repetitions_count(self):
+        load_dotenv()
+        return int(os.environ['REPETITION_TARGET'])
+
+
+    def get_countdown_to_final_test(self):
+        pass
+
+
+    def count_test_score(self):
+        pass
+
+
+    def user_did_start_test(self):
+        pass
+
+
+    def user_did_final_test(self):
+        pass
+
+
     def submit_test_answer(self, answer: str):
         pass
 
