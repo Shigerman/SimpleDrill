@@ -1,12 +1,16 @@
+import os
 import urllib
 from uuid import uuid4
+from collections import namedtuple
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from threadlocals.threadlocals import get_current_request
+from dotenv import load_dotenv
 
-from backend.app.models import Invite, Person
+from backend.app.models import Invite, Person, ChallengeSummary
+from backend.app.models import TestStep, TestSummary
 from backend.app import views
 
 
@@ -80,13 +84,13 @@ class Visitor:
 
 
     def show_test_explanation_before_test(self):
-        user_challenges_count = count_user_challenges(self)
-        countdown = get_countdown_to_final_test(self)
+        user_challenges_count = self.count_user_challenges()
+        countdown = self.get_countdown_to_final_test()
 
-        start_test_score, final_test_score = count_test_score(self)
+        start_test_score, final_test_score = self.count_test_score()
         Explanation = namedtuple('Explanation', 'text page_to_go_to')
 
-        if not user_challenges_count and not user_did_start_test(self):
+        if not user_challenges_count and not self.user_did_start_test():
             text = ("We recommend that you take our test before you start" +
                 " Python drills.")
             page_to_go_to = "/test"
@@ -95,7 +99,7 @@ class Visitor:
                 f"{countdown} drills you will be able to take the test again."
                 +"\nGo and practice!")
             page_to_go_to = "/select_topic"
-        elif user_did_final_test(self):
+        elif self.user_did_final_test():
             text = ("Congratulations!\nYou have completed all the tests."
                 + f"\nYour start test score: {start_test_score}.\nYour final "
                 +f"test score: {final_test_score}.\nGo and practice more!")
@@ -109,7 +113,7 @@ class Visitor:
 
 
     def count_user_challenges(self):
-        challenges = ChallengeSummary.objects.filter(user=self.person.user)
+        challenges = ChallengeSummary.objects.filter(person=self.person)
         challenges = [challenge.asked_count for challenge in challenges]
         return sum(challenges)
 
@@ -120,37 +124,37 @@ class Visitor:
 
 
     def get_countdown_to_final_test(self):
-        target_challenges = get_target_repetitions_count()
-        user_challenges = count_user_challenges(self)
+        target_challenges = self.get_target_repetitions_count()
+        user_challenges = self.count_user_challenges()
         return target_challenges - user_challenges
 
 
     def count_test_score(self):
-        start_question_count = len(TestQuestion.objects.filter(topic="start"))
-        final_question_count = len(TestQuestion.objects.filter(topic="final"))
+        start_question_count = len(TestStep.objects.filter(topic="start"))
+        final_question_count = len(TestStep.objects.filter(topic="final"))
 
         correct_answers_start = len(TestSummary.objects.filter(
-            user=self.person.user, is_user_answer_correct=True, topic="start"))
+            person=self.person, is_user_answer_correct=True, topic="start"))
         correct_answers_final = len(TestSummary.objects.filter(
-            user=self.person.user, is_user_answer_correct=True, topic="final"))
+            person=self.person, is_user_answer_correct=True, topic="final"))
 
         start_score = f"{correct_answers_start} of {start_question_count}"
         final_score = f"{correct_answers_final} of {final_question_count}"
 
-        if user_did_final_test(self):
+        if self.user_did_final_test():
             return (start_score, final_score,)
-        if user_did_start_test(self):
+        if self.user_did_start_test():
             return (start_score, None,)
         else:
             return (None, None)
 
 
     def user_did_start_test(self):
-        start_question_count = len(TestQuestion.objects.filter(topic="start"))
+        start_question_count = len(TestStep.objects.filter(topic="start"))
         start_question_user_count = len(TestSummary.objects.filter(
-            user=self.person.user, topic="start"))
+            person=self.person, topic="start"))
         not_answered_user_test_steps_count = len(TestSummary.objects.filter(
-            user=self.person.user, is_user_answer_correct=None))
+            person=self.person, is_user_answer_correct=None))
 
         if start_question_count == start_question_user_count and \
             not not_answered_user_test_steps_count:
@@ -160,11 +164,11 @@ class Visitor:
 
 
     def user_did_final_test(self):
-        test_question_count = len(TestQuestion.objects.all())
+        test_question_count = len(TestStep.objects.all())
         test_question_user_count = len(
-            TestSummary.objects.filter(user=self.person.user))
+            TestSummary.objects.filter(person=self.person))
         not_answered_user_test_steps_count = len(TestSummary.objects.filter(
-            user=self.person.user, is_user_answer_correct=None))
+            person=self.person, is_user_answer_correct=None))
 
         if test_question_count == test_question_user_count and \
             not not_answered_user_test_steps_count:

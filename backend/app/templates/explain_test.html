@@ -3,14 +3,16 @@
 {% block body %}
 
 <nu-flex flow="column" content="center" items="center" height="40">
-    <nu-card content="center" height="12" width="27" fill="#306998" color="white" overflow="scroll">
-        <p> Test process or result explanation </p>
+    <nu-card content="center" height="13" width="27" fill="#306998" color="white" overflow="scroll">
+        {% for item in explanation_text %}
+            <p> {{ item }} </p>
+        {% endfor %}
     </nu-card>
 
     <br></br>
 
     <nu-btn height="5" width="27" size="lg" fill="#ffd43b" color="dark grey">
-        <a href="/test"> </a> Take the test </nu-btn>
+        <a href={{page_to_go_to}}></a> </a> Take the test </nu-btn>
 </nu-flex>
 
 {% endblock %}
