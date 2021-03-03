@@ -106,8 +106,18 @@ def drill_topic(request):
 
 
 def explain_test(request):
-    context = {}
-    return render(request, 'explain_test.html', context)
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    visitor = core.Visitor(user=request.user)
+    return visitor.show_test_explanation_before_test()
+
+
+def render_explain_test(test_explanation):
+    context = {
+        'explanation_text': test_explanation.text.split("\n"),
+        'page_to_go_to': test_explanation.page_to_go_to
+    }
+    return render(get_current_request(), 'explain_test.html', context)
 
 
 def test(request):

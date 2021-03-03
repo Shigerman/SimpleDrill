@@ -79,11 +79,7 @@ class Visitor:
         return redirect("/")
 
 
-    def want_test(self):
-        pass
-
-
-    def show_test_explanation(self):
+    def show_test_explanation_before_test(self):
         user_challenges_count = count_user_challenges(self)
         countdown = get_countdown_to_final_test(self)
 
@@ -124,19 +120,57 @@ class Visitor:
 
 
     def get_countdown_to_final_test(self):
-        pass
+        target_challenges = get_target_repetitions_count()
+        user_challenges = count_user_challenges(self)
+        return target_challenges - user_challenges
 
 
     def count_test_score(self):
-        pass
+        start_question_count = len(TestQuestion.objects.filter(topic="start"))
+        final_question_count = len(TestQuestion.objects.filter(topic="final"))
+
+        correct_answers_start = len(TestSummary.objects.filter(
+            user=self.person.user, is_user_answer_correct=True, topic="start"))
+        correct_answers_final = len(TestSummary.objects.filter(
+            user=self.person.user, is_user_answer_correct=True, topic="final"))
+
+        start_score = f"{correct_answers_start} of {start_question_count}"
+        final_score = f"{correct_answers_final} of {final_question_count}"
+
+        if user_did_final_test(self):
+            return (start_score, final_score,)
+        if user_did_start_test(self):
+            return (start_score, None,)
+        else:
+            return (None, None)
 
 
     def user_did_start_test(self):
-        pass
+        start_question_count = len(TestQuestion.objects.filter(topic="start"))
+        start_question_user_count = len(TestSummary.objects.filter(
+            user=self.person.user, topic="start"))
+        not_answered_user_test_steps_count = len(TestSummary.objects.filter(
+            user=self.person.user, is_user_answer_correct=None))
+
+        if start_question_count == start_question_user_count and \
+            not not_answered_user_test_steps_count:
+            return True
+        else:
+            return False
 
 
     def user_did_final_test(self):
-        pass
+        test_question_count = len(TestQuestion.objects.all())
+        test_question_user_count = len(
+            TestSummary.objects.filter(user=self.person.user))
+        not_answered_user_test_steps_count = len(TestSummary.objects.filter(
+            user=self.person.user, is_user_answer_correct=None))
+
+        if test_question_count == test_question_user_count and \
+            not not_answered_user_test_steps_count:
+            return True
+        else:
+            return False
 
 
     def submit_test_answer(self, answer: str):
