@@ -118,7 +118,7 @@
     ]
   },
   { "topic": "general",
-    "q": "What are the tree main principles of object-oriented-programming?",
+    "q": "What are the three main principles of object-oriented-programming?",
     "th": "Polymorphism, encapsulation, and inheritance are usually given as the three fundamental principles of object-oriented methodology.",
     "+": ["polymorphism, encapsulation, and inheritance"],
     "-": [

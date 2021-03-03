@@ -1,0 +1,81 @@
+[{ "topic": "start", 
+    "q": "How many keywords are there in Python (version 3.8)?\nWrite a number.",
+    "+": "35"
+  },
+  { "topic": "start",
+    "q": "How many loops (maximum) is it recommended to make in a list comprehension?\nWrite a number.",
+    "+": "1"
+  },
+  { "topic": "start",
+   "q": "What style is used in this identifier: MyClass?\nWrite one word.",
+   "+": "pascal"
+ },
+  { "topic": "start",
+    "q": "What does letter 'S' stand for in 'HTTPS'?\nWrite one word.",
+    "+": "secure"
+  },
+  { "topic": "start",
+   "q": "How many characters are there in ASCII?\nWrite a number.",
+   "+": "128"
+ },
+ { "topic": "start",
+   "q": "What does FK stand for while talking about relational databases?\nWrite two words.",
+   "+": "foreign key"
+ },
+ { "topic": "start",
+   "q": "What does DSL stand for?\nWrite three words.",
+   "+": "domain specific language"
+ },
+ { "topic": "start",
+   "q": "What flag opens a python interactive console when running a script?\nWrite one flag.",
+   "+": "i"
+ },
+ { "topic": "start",
+   "q": "What http response code tells that the request has been fulfilled, resulting in the creation of a new resource?\nWrite a number.",
+   "+": "201"
+ },
+ { "topic": "start",
+   "q": "What does PEP mean?",
+   "+": "python enhancement proposal"
+ },
+ { "topic": "final", 
+  "q": "How many keywords are there in Python (version 3.8)?\nWrite a number.",
+  "+": "35"
+},
+{ "topic": "final",
+  "q": "How many loops (maximum) is it recommended to make in a list comprehension?\nWrite a number.",
+  "+": "1"
+},
+{ "topic": "final",
+ "q": "What style is used in this identifier: MyClass?\nWrite one word.",
+ "+": "pascal"
+},
+{ "topic": "final",
+  "q": "What does letter 'S' stand for in 'HTTPS'?\nWrite one word.",
+  "+": "secure"
+},
+{ "topic": "final",
+ "q": "How many characters are there in ASCII?\nWrite a number.",
+ "+": "128"
+},
+{ "topic": "final",
+ "q": "What does FK stand for while talking about relational databases?\nWrite two words.",
+ "+": "foreign key"
+},
+{ "topic": "final",
+ "q": "What does DSL stand for?\nWrite three words.",
+ "+": "domain specific language"
+},
+{ "topic": "final",
+ "q": "What flag opens a python interactive console when running a script?\nWrite one flag.",
+ "+": "i"
+},
+{ "topic": "final",
+ "q": "What http response code tells that the request has been fulfilled, resulting in the creation of a new resource?\nWrite a number.",
+ "+": "201"
+},
+{ "topic": "final",
+ "q": "What does PEP mean?",
+ "+": "python enhancement proposal"
+}
+]
