@@ -226,6 +226,27 @@ class Visitor:
         if not test_answer:
             raise AssertionError("Test answer submit without a test question")
         return self.check_test_answer(test_answer)
+    
+
+    def check_test_answer(self, test_answer):
+        # Save True/False into db depending on answer correctness.
+        # Also save the actual user answer to check our check correctness.
+        test_step = self.get_test_step()
+        test_answer = test_answer.lower()
+        correct_test_answer = test_step.test_question
+
+        is_correct_user_answer = correct_test_answer in test_answer
+        # 5 is taken here to omit unneseccary symbols, spaces, dots, etc
+        user_answer_not_long = len(test_answer) <= (len(correct_test_answer) + 5)
+
+        if is_correct_user_answer and user_answer_not_long:
+            test_step.is_user_answer_correct = True
+        else:
+            test_step.is_user_answer_correct = False
+        test_step.user_test_answer = test_answer
+        test_step.save()
+        return self.show_test_step()
+
 
     def want_drill(self):
         pass

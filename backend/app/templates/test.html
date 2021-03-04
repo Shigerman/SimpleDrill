@@ -6,7 +6,9 @@
 
     <nu-card content="center" height="12" width="27" fill="#306998" color="white" overflow="scroll">
     ❓ QUESTION:
-        <p> test question </p>
+        {% for item in test_question %}
+            <p> {{ item }} </p>
+        {% endfor %}
     </nu-card>
 
     <br></br>
