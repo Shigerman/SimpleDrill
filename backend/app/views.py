@@ -121,5 +121,19 @@ def render_explain_test(test_explanation):
 
 
 def test(request):
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    visitor = core.Visitor(user=request.user)
+    test_answer = request.GET.get('test_answer')
+    if not test_answer:
+        return visitor.show_test_step()
+    return visitor.submit_test_answer(test_answer)
+
+
+def render_test_step(test_step):
     context = {}
-    return render(request, 'test.html', context)
+    return render(get_current_request(), 'test.html', context)
+
+
+def render_test_score(test_score):
+    pass

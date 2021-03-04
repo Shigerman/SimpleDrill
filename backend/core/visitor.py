@@ -177,6 +177,38 @@ class Visitor:
             return False
 
 
+    def show_test_step(self):
+        test_step = self.get_test_step()
+        if not test_step:
+            test_score = self.count_test_score()
+            return views.render_test_score(test_score)
+        return views.render_test_step(test_step)
+
+
+    def get_test_step(self):
+        # User takes the start test before doing drills.
+        # After doing the target number of drills, they can take final test.
+        user_test_step_count = len(TestSummary.objects.filter(
+            person=self.person))
+        final_question_user_count = len(TestSummary.objects.filter(
+            person=self.person, topic="final"))
+        not_answered_test_steps = TestSummary.objects.filter(
+            person=self.person, is_user_answer_correct=None)
+        countdown = self.get_countdown_to_final_test()
+
+        if not user_test_step_count:
+            self.set_test_steps(topic='start')
+        elif self.user_did_final_test():
+            return None
+        elif final_question_user_count == 0 and countdown <= 0:
+            set_test_steps(visitor, topic='final')
+        return next(iter(not_answered_test_steps), None)
+
+
+    def set_test_steps(self, topic):
+        pass
+
+
     def submit_test_answer(self, answer: str):
         pass
 
