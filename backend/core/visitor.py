@@ -206,12 +206,26 @@ class Visitor:
 
 
     def set_test_steps(self, topic):
-        pass
+        test_questions_to_show = TestStep.objects.filter(topic=topic)
+
+        if len(test_questions_to_show) == 0:
+            raise Exception("500 internal server error")
+
+        # Unlike challenges, test steps are supposed to be taken only
+        # once each and their quantity in a test is defined, so all test
+        # steps are written into db at once so that user is sure to take
+        # all obligatory test steps.
+        for test_question in test_questions_to_show:
+            TestSummary(
+                person=self.person,
+                test_question=test_question,
+                topic=topic).save()
 
 
-    def submit_test_answer(self, answer: str):
-        pass
-
+    def submit_test_answer(self, test_answer: str):
+        if not test_answer:
+            raise AssertionError("Test answer submit without a test question")
+        return self.check_test_answer(test_answer)
 
     def want_drill(self):
         pass

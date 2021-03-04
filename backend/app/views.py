@@ -131,7 +131,7 @@ def test(request):
 
 
 def render_test_step(test_step):
-    context = {}
+    context = {'test_question': test_step.test_question}
     return render(get_current_request(), 'test.html', context)
 
 
