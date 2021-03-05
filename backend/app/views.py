@@ -8,9 +8,17 @@ from backend import core
 from .models import Person, Invite
 
 
-def homepage(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
+def need_logged_in_visitor(handler):
+    def decorated(request):
+        if not request.user.is_authenticated:
+            return redirect("/login_visitor")
+        visitor = core.Visitor(user=request.user)
+        return handler(request, visitor)
+    return decorated
+
+
+@need_logged_in_visitor
+def homepage(request, visitor):
     return render(request, 'homepage.html')
 
 
@@ -20,21 +28,22 @@ def register_visitor(request):
     invite = request.GET.get('invite')
     credentials = (username, password, invite)
 
-    if any(credentials) and not all(credentials):
-        return render_register_visitor(empty_field=True, invalid_code=False)
+    if not any(credentials):
+        return render_register_visitor()
     elif all(credentials):
         username = urllib.parse.unquote(username)
         password = urllib.parse.unquote(password)
         invite = urllib.parse.unquote(invite)
         return core.Visitor.register(username, password, invite)
-    return render(request, 'register_visitor.html')
+    else:
+        return render_register_visitor(empty_field=True, invalid_code=False)
 
 
 def render_register_visitor(empty_field=False, invalid_code=False):
     context = {
         "empty_field": empty_field,
         "invalid_code": invalid_code,
-        }
+    }
     return render(get_current_request(), 'register_visitor.html', context)
 
 
@@ -43,13 +52,14 @@ def login_visitor(request):
     password = request.GET.get('password')
     credentials = (username, password)
 
-    if any(credentials) and not all(credentials): 
-        return render_login_visitor(invalid_credentials=True)
+    if not any(credentials):
+        return render_login_visitor()
     elif all(credentials):
         username = urllib.parse.unquote(username)
         password = urllib.parse.unquote(password)
         return core.Visitor.login(username, password)
-    return render(request, 'login_visitor.html')
+    else:
+        return render_login_visitor(invalid_credentials=True)
 
 
 def render_login_visitor(invalid_credentials=False):
@@ -57,10 +67,8 @@ def render_login_visitor(invalid_credentials=False):
     return render(get_current_request(), 'login_visitor.html', context)
 
 
-def logout_visitor(request):
-    if not request.user.is_authenticated:
-        return redirect("/")
-    visitor = core.Visitor(user=request.user)
+@need_logged_in_visitor
+def logout_visitor(request, visitor):
     return visitor.logout()
 
 
@@ -72,10 +80,8 @@ def disconnect_person_from_session(person):
     django.contrib.auth.logout(get_current_request())
 
 
-def add_invite(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
+@need_logged_in_visitor
+def add_invite(request, visitor):
     comment = request.GET.get('comment')
     if not comment:
         return redirect("view_invites")
@@ -83,10 +89,8 @@ def add_invite(request):
     return visitor.show_invites()
 
 
+@need_logged_in_visitor
 def view_invites(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
     return visitor.show_invites()
 
 
@@ -95,10 +99,8 @@ def render_invites(invites):
     return render(get_current_request(), 'view_invites.html', context)
 
 
-def explain_test(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
+@need_logged_in_visitor
+def explain_test(request, visitor):
     return visitor.show_test_explanation_before_test()
 
 
@@ -110,10 +112,8 @@ def render_explain_test(test_explanation):
     return render(get_current_request(), 'explain_test.html', context)
 
 
-def select_topic(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
+@need_logged_in_visitor
+def select_topic(request, visitor):
     # user must take the start test before drilling topics
     if not visitor.visitor_did_start_test():
         return redirect("/explain_test")
@@ -123,10 +123,8 @@ def select_topic(request):
     return render(request, 'select_topic.html')
 
 
-def test(request):
-    if not request.user.is_authenticated:
-        return redirect("/login_visitor")
-    visitor = core.Visitor(user=request.user)
+@need_logged_in_visitor
+def test(request, visitor):
     test_answer = request.GET.get('test_answer')
     if not test_answer:
         return visitor.show_test_step()
