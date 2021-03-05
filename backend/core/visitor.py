@@ -228,12 +228,12 @@ class Visitor:
         return self.check_test_answer(test_answer)
     
 
-    def check_test_answer(self, test_answer):
+    def check_test_answer(self, test_answer=None):
         # Save True/False into db depending on answer correctness.
         # Also save the actual user answer to check our check correctness.
         test_step = self.get_test_step()
         test_answer = test_answer.lower()
-        correct_test_answer = test_step.test_question
+        correct_test_answer = test_step.test_question.test_answer
 
         is_correct_user_answer = correct_test_answer in test_answer
         # 5 is taken here to omit unneseccary symbols, spaces, dots, etc
@@ -243,7 +243,7 @@ class Visitor:
             test_step.is_user_answer_correct = True
         else:
             test_step.is_user_answer_correct = False
-        test_step.user_test_answer = test_answer
+        test_step.user_answer = test_answer
         test_step.save()
         return self.show_test_step()
 

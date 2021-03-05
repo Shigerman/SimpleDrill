@@ -136,4 +136,9 @@ def render_test_step(test_step):
 
 
 def render_test_score(test_score):
-    pass
+    start_score, final_score = test_score
+    context = {
+        'start_score': start_score,
+        'final_score': final_score,
+    }
+    return render(get_current_request(), 'test.html', context)
