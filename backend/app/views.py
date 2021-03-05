@@ -119,7 +119,7 @@ def select_topic(request):
         return redirect("/explain_test")
     topic = request.GET.get('topic')
     if topic:
-        return visitor.want_drill(topic=topic)
+        return visitor.want_to_drill(topic=topic)
     return render(request, 'select_topic.html')
 
 

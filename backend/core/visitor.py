@@ -9,8 +9,9 @@ from django.shortcuts import redirect
 from threadlocals.threadlocals import get_current_request
 from dotenv import load_dotenv
 
-from backend.app.models import Invite, Person, ChallengeSummary
-from backend.app.models import TestStep, TestSummary
+from backend.app.models import Invite, Person
+from backend.app.models import ChallengeSummary, CurrentAnswers
+from backend.app.models import TestSummary, TestStep
 from backend.app import views
 
 
@@ -249,12 +250,10 @@ class Visitor:
         return self.show_test_step()
 
 
-    def select_drill_topic(self, topic: str):
-        pass
-
-
-    def want_drill(self):
-        pass
+    def want_to_drill(self, topic: str):
+        self.person.challenge_topic = topic
+        self.person.save()
+        return redirect("/drill_topic")
 
 
     def submit_drill_answer(self, answer: str):
