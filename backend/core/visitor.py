@@ -90,7 +90,7 @@ class Visitor:
         start_test_score, final_test_score = self.count_test_score()
         Explanation = namedtuple('Explanation', 'text page_to_go_to')
 
-        if not user_challenges_count and not self.user_did_start_test():
+        if not user_challenges_count and not self.visitor_did_start_test():
             text = ("We recommend that you take our test before you start" +
                 " Python drills.")
             page_to_go_to = "/test"
@@ -99,7 +99,7 @@ class Visitor:
                 f"{countdown} drills you will be able to take the test again."
                 +"\nGo and practice!")
             page_to_go_to = "/select_topic"
-        elif self.user_did_final_test():
+        elif self.visitor_did_final_test():
             text = ("Congratulations!\nYou have completed all the tests."
                 + f"\nYour start test score: {start_test_score}.\nYour final "
                 +f"test score: {final_test_score}.\nGo and practice more!")
@@ -141,15 +141,15 @@ class Visitor:
         start_score = f"{correct_answers_start} of {start_question_count}"
         final_score = f"{correct_answers_final} of {final_question_count}"
 
-        if self.user_did_final_test():
+        if self.visitor_did_final_test():
             return (start_score, final_score,)
-        if self.user_did_start_test():
+        if self.visitor_did_start_test():
             return (start_score, None,)
         else:
             return (None, None)
 
 
-    def user_did_start_test(self):
+    def visitor_did_start_test(self):
         start_question_count = len(TestStep.objects.filter(topic="start"))
         start_question_user_count = len(TestSummary.objects.filter(
             person=self.person, topic="start"))
@@ -163,7 +163,7 @@ class Visitor:
             return False
 
 
-    def user_did_final_test(self):
+    def visitor_did_final_test(self):
         test_question_count = len(TestStep.objects.all())
         test_question_user_count = len(
             TestSummary.objects.filter(person=self.person))
@@ -198,7 +198,7 @@ class Visitor:
 
         if not user_test_step_count:
             self.set_test_steps(topic='start')
-        elif self.user_did_final_test():
+        elif self.visitor_did_final_test():
             return None
         elif final_question_user_count == 0 and countdown <= 0:
             set_test_steps(visitor, topic='final')
@@ -237,7 +237,8 @@ class Visitor:
 
         is_correct_user_answer = correct_test_answer in test_answer
         # 5 is taken here to omit unneseccary symbols, spaces, dots, etc
-        user_answer_not_long = len(test_answer) <= (len(correct_test_answer) + 5)
+        user_answer_not_long = \
+            len(test_answer) <= (len(correct_test_answer) + 5)
 
         if is_correct_user_answer and user_answer_not_long:
             test_step.is_user_answer_correct = True
@@ -248,11 +249,11 @@ class Visitor:
         return self.show_test_step()
 
 
-    def want_drill(self):
+    def select_drill_topic(self, topic: str):
         pass
 
 
-    def select_drill_topic(self, topic: str):
+    def want_drill(self):
         pass
 
 

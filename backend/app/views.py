@@ -95,16 +95,6 @@ def render_invites(invites):
     return render(get_current_request(), 'view_invites.html', context)
 
 
-def select_topic(request):
-    context = {}
-    return render(request, 'select_topic.html', context)
-
-
-def drill_topic(request):
-    context = {}
-    return render(request, 'drill_topic.html', context)
-
-
 def explain_test(request):
     if not request.user.is_authenticated:
         return redirect("/login_visitor")
@@ -120,6 +110,19 @@ def render_explain_test(test_explanation):
     return render(get_current_request(), 'explain_test.html', context)
 
 
+def select_topic(request):
+    if not request.user.is_authenticated:
+        return redirect("/login_visitor")
+    visitor = core.Visitor(user=request.user)
+    # user must take the start test before drilling topics
+    if not visitor.visitor_did_start_test():
+        return redirect("/explain_test")
+    topic = request.GET.get('topic')
+    if topic:
+        return visitor.want_drill(topic=topic)
+    return render(request, 'select_topic.html')
+
+
 def test(request):
     if not request.user.is_authenticated:
         return redirect("/login_visitor")
@@ -131,7 +134,8 @@ def test(request):
 
 
 def render_test_step(test_step):
-    context = {'test_question': test_step.test_question.test_question.split("\n")}
+    context = {'test_question':
+        test_step.test_question.test_question.split("\n")}
     return render(get_current_request(), 'test.html', context)
 
 
@@ -142,3 +146,8 @@ def render_test_score(test_score):
         'final_score': final_score,
     }
     return render(get_current_request(), 'test.html', context)
+
+
+def drill_topic(request):
+    context = {}
+    return render(request, 'drill_topic.html', context)
