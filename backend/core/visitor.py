@@ -256,6 +256,14 @@ class Visitor:
         return redirect("/drill_topic")
 
 
+    def show_challenge(self):
+        pass
+
+
+    def get_next_challenge(self):
+        pass
+
+
     def submit_drill_answer(self, answer: str):
         pass
 

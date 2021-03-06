@@ -146,6 +146,22 @@ def render_test_score(test_score):
     return render(get_current_request(), 'test.html', context)
 
 
+@need_logged_in_visitor
 def drill_topic(request):
+    answer_choice = request.GET.get('choice')
+
+    if request.GET.get('next') == "next":
+        return visitor.get_next_challenge()
+    elif answer_choice == 'dont_know':
+        return visitor.give_up_drill()
+    elif answer_choice == 'no_correct_answer':
+        return visitor.submit_drill_answer(no_correct_answer=True)
+    elif answer_choice:
+        answer_id = int(answer_choice) # need to have it as digit
+        visitor.submit_drill_answer(answer_id=answer_id)
+    return visitor.show_challenge()
+
+
+def render_challenge(challenge):
     context = {}
-    return render(request, 'drill_topic.html', context)
+    return render(get_current_request(), 'drill_topic.html', context)
