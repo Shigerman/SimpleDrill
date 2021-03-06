@@ -90,7 +90,7 @@ def add_invite(request, visitor):
 
 
 @need_logged_in_visitor
-def view_invites(request):
+def view_invites(request, visitor):
     return visitor.show_invites()
 
 
@@ -147,7 +147,7 @@ def render_test_score(test_score):
 
 
 @need_logged_in_visitor
-def drill_topic(request):
+def drill_topic(request, visitor):
     answer_choice = request.GET.get('choice')
 
     if request.GET.get('next') == "next":

@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from threadlocals.threadlocals import get_current_request
-from dotenv import load_dotenv
 
 from backend.app.models import Invite, Person
 from backend.app.models import ChallengeSummary, CurrentAnswers
@@ -20,10 +19,9 @@ class Visitor:
 
     def __init__(self, user: User):
         try:
-            self.id = user.id
             self.person = Person.objects.get(user=user)
         except Person.DoesNotExist as ex:
-            raise LookupError(f"User with id {user.id} not in DB") from ex
+            raise LookupError(f"No person for {user} in DB") from ex
 
 
     @staticmethod
@@ -34,8 +32,6 @@ class Visitor:
                 user = User.objects.create_user(
                     username, email := None, password)
                 person = Person.objects.create(user=user)
-                user.save()
-                person.save()
                 code_to_check.used_by = user
                 code_to_check.save()
                 views.connect_person_to_session(person)
@@ -71,10 +67,10 @@ class Visitor:
         if not self.person.user.is_staff:
             return redirect("/login_visitor")
 
-        invite = Invite.objects.create(
+        Invite.objects.create(
             inviter = self.person.user,
             comment = comment,
-            code = uuid4().hex).save()
+            code = uuid4().hex)
 
         return self.show_invites()
 
@@ -96,9 +92,9 @@ class Visitor:
                 " Python drills.")
             page_to_go_to = "/test"
         elif countdown > 0:
-            text = (f"Your start test score: {start_test_score}.\nAfter doing " +
-                f"{countdown} drills you will be able to take the test again."
-                +"\nGo and practice!")
+            text = (f"Your start test score: {start_test_score}.\nAfter " +
+                f"doing {countdown} drills you will be able to take the " +
+                "test again.\nGo and practice!")
             page_to_go_to = "/select_topic"
         elif self.visitor_did_final_test():
             text = ("Congratulations!\nYou have completed all the tests."
@@ -120,7 +116,6 @@ class Visitor:
 
 
     def get_target_repetitions_count(self):
-        load_dotenv()
         return int(os.environ['REPETITION_TARGET'])
 
 
@@ -154,28 +149,26 @@ class Visitor:
         start_question_count = len(TestStep.objects.filter(topic="start"))
         start_question_user_count = len(TestSummary.objects.filter(
             person=self.person, topic="start"))
-        not_answered_user_test_steps_count = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=None))
+        test_was_started = start_question_count == start_question_user_count
 
-        if start_question_count == start_question_user_count and \
-            not not_answered_user_test_steps_count:
-            return True
-        else:
-            return False
+        unanswered_questions = len(TestSummary.objects.filter(
+            person=self.person, is_user_answer_correct=None))
+        all_answered = unanswered_questions == 0
+
+        return test_was_started and all_answered
 
 
     def visitor_did_final_test(self):
         test_question_count = len(TestStep.objects.all())
         test_question_user_count = len(
             TestSummary.objects.filter(person=self.person))
-        not_answered_user_test_steps_count = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=None))
+        tests_were_started = test_question_count == test_question_user_count
 
-        if test_question_count == test_question_user_count and \
-            not not_answered_user_test_steps_count:
-            return True
-        else:
-            return False
+        unanswered_questions = len(TestSummary.objects.filter(
+            person=self.person, is_user_answer_correct=None))
+        all_answered = unanswered_questions == 0
+
+        return tests_were_started and all_answered
 
 
     def show_test_step(self):
