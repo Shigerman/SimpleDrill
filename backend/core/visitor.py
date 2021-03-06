@@ -10,7 +10,7 @@ from threadlocals.threadlocals import get_current_request
 
 from backend.app.models import Invite, Person
 from backend.app.models import ChallengeSummary, CurrentAnswers
-from backend.app.models import TestSummary, TestStep
+from backend.app.models import TestSummary, TestStep, Answer, Question
 from backend.app import views
 
 
@@ -68,9 +68,9 @@ class Visitor:
             return redirect("/login_visitor")
 
         Invite.objects.create(
-            inviter = self.person.user,
-            comment = comment,
-            code = uuid4().hex)
+            inviter=self.person.user,
+            comment=comment,
+            code=uuid4().hex)
 
         return self.show_invites()
 
@@ -250,7 +250,28 @@ class Visitor:
 
 
     def show_challenge(self):
-        pass
+        challenge = get_current()
+        if not challenge:
+            challenge = core.challenge.new(self)
+            core.challenge.set_current(self, challenge)
+        return views.render_challenge(challenge)
+
+
+    def get_current(self):
+        saved_answers = CurrentAnswers.objects.filter(person=self.user)
+        if not saved_answers:
+            return None
+
+        challenge = Challenge(self.person)
+        # Don't keep question in DB, infer it from answer
+        first_answer = next(iter(saved_answers))
+        challenge.question = Answer.objects.get(pk=first_answer.answer_id).question
+        challenge.answers = [
+            Answer.objects.get(pk=answer.answer_id) for answer in saved_answers
+        ]
+        challenge.disclose_answers = self.person.disclose_answers
+
+        return challenge
 
 
     def get_next_challenge(self):
@@ -263,3 +284,14 @@ class Visitor:
 
     def give_up_drill(self):
         pass
+
+
+class Challenge:
+
+    def __init__(self, visitor):
+        self.visitor = visitor
+        self.question: Question = None
+        self.answers: list[Answer] = []
+        # If True, show correct/wrong answers after user answers wrongly
+        # or issued the "don't know" command
+        self.disclose_answers = False

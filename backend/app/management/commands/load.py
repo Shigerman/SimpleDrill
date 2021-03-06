@@ -3,7 +3,7 @@ import json
 
 from django.core import management
 from django.core.management.base import BaseCommand
-from backend.app.models import TestStep
+from backend.app.models import Answer, Question, TestStep
 
 class Command(BaseCommand):
     help = "Clears database and loads new data into it"
@@ -19,9 +19,32 @@ class Command(BaseCommand):
                 file = file.read_text()
                 data = json.loads(file)
                 for test_step in data:
-                    step = TestStep(
+                    TestStep(
                         test_question=test_step['q'],
                         topic=test_step['topic'],
-                        test_answer=test_step['+'],)
-                    step.save()
+                        test_answer=test_step['+'],).save()
+
+            if "challenges" in str(file):
+                file = file.read_text()
+                data = json.loads(file)
+                for challenge in data:
+                    question = Question(
+                        question_text=challenge['q'],
+                        explanation_text=challenge['th'],
+                        topic=challenge['topic'])
+                    question.save()
+
+                    # there can be no correct answer not to prompt the user
+                    if '+' in challenge:
+                        for answer in challenge['+']:
+                            Answer(
+                                question=question,
+                                answer_text=answer,
+                                is_correct=True).save()
+
+                    for answer in challenge['-']:
+                        Answer(
+                            question=question,
+                            answer_text=answer,
+                            is_correct=False).save()
         print('The database was seeded successfully!')
