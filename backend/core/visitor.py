@@ -1,7 +1,8 @@
+from collections import namedtuple
 import os
+import random
 import urllib
 from uuid import uuid4
-from collections import namedtuple
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -205,10 +206,9 @@ class Visitor:
         if len(test_questions_to_show) == 0:
             raise Exception("500 internal server error")
 
-        # Unlike challenges, test steps are supposed to be taken only
-        # once each and their quantity in a test is defined, so all test
-        # steps are written into db at once so that user is sure to take
-        # all obligatory test steps.
+        # Test steps are to be taken only once each and their quantity
+        # in a test is defined, so all test steps are written into db
+        # at once so that user is sure to take all obligatory test steps.
         for test_question in test_questions_to_show:
             TestSummary(
                 person=self.person,
@@ -250,40 +250,97 @@ class Visitor:
 
 
     def show_challenge(self):
-        challenge = get_current()
+        challenge = get_current(self)
         if not challenge:
-            challenge = core.challenge.new(self)
-            core.challenge.set_current(self, challenge)
+            challenge = get_next_challenge(self)
+            # write into db 4 answers belonging to the last question shown
+            # to user so that to get back to the question if user makes
+            # a pause in drilling
+            set_current_challenge(self, challenge)
+
         return views.render_challenge(challenge)
 
 
-    def get_current(self):
-        saved_answers = CurrentAnswers.objects.filter(person=self.user)
-        if not saved_answers:
-            return None
+def get_current_challenge(self):
+    saved_answers = CurrentAnswers.objects.filter(person=self.person)
+    if not saved_answers:
+        return None
 
-        challenge = Challenge(self.person)
-        # Don't keep question in DB, infer it from answer
-        first_answer = next(iter(saved_answers))
-        challenge.question = Answer.objects.get(pk=first_answer.answer_id).question
-        challenge.answers = [
-            Answer.objects.get(pk=answer.answer_id) for answer in saved_answers
-        ]
-        challenge.disclose_answers = self.person.disclose_answers
+    challenge = Challenge(self.person)
+    # Don't keep question in DB, infer it from answer
+    first_answer = next(iter(saved_answers))
+    challenge.question = Answer.objects.get(pk=first_answer.answer_id).question
+    challenge.answers = [
+        Answer.objects.get(pk=answer.answer_id) for answer in saved_answers
+    ]
+    challenge.disclose_answers = self.person.disclose_answers
 
-        return challenge
-
-
-    def get_next_challenge(self):
-        pass
+    return challenge
 
 
-    def submit_drill_answer(self, answer: str):
-        pass
+def get_next_challenge(visitor):
+    challenge = Challenge(visitor)
+    topic = visitor.person.challenge_topic
+    user_topic_challenges = ChallengeSummary.objects.filter(
+            person=visitor.person, question__topic=topic)
+
+    # When a new topic is chosen by the user, all questions in this topic
+    # are written into ChallengSummary db table for this user, and can
+    # then be answered by the user many times (times are counted).
+    if len(user_topic_questions) == 0:
+        set_topic_challenges(topic=topic)
+
+    # Select next question based on challenge history: the one that was
+    # asked less number of times.
+    asked_counts: list[int] = \
+        [challenge.asked_count for challenge in user_topic_challenges]
+    min_asked_count = min(asked_counts)
+    challenges_to_show = [challenge for challenge in user_topic_challenges if challenge.asked_count == min_asked_count]
+    challenge.question = next(iter(challenges_to_show)).question
+
+    # choose four random answers frim the question answer set
+    answers_to_question = list(challenge.question.answer_set.all())
+    answers_on_screen = 4
+    challenge.answers = random.sample(answers_to_question, answers_on_screen)
+
+    # increment the number of times asked for the question
+    record = ChallengeSummary.objects.get(
+        person=visitor.person,
+        question=challenge.question)
+    record.asked_count += 1
+    record.save()
+
+    return challenge
 
 
-    def give_up_drill(self):
-        pass
+def set_current_challenge(visitor, challenge):
+    # write into db 4 answers belonging to the last question shown to user
+    # in the beginning delete old answers if there are any
+    CurrentAnswers.objects.filter(person=visitor.person).delete()
+    for answer in challenge.answers:
+        CurrentAnswers(person=visitor.person, answer=answer).save()
+    visitor.person.disclose_answers = challenge.disclose_answers
+    visitor.person.save()
+
+
+def set_topic_challenges(visitor, topic):
+    topic_questions = Question.objects.filter(topic=topic)
+
+    if len(topic_questions) == 0:
+        raise Exception("500 internal server error")
+
+    for question in topic_questions:
+        ChallengeSummary(
+            person=self.person,
+            question=question).save()
+
+
+def submit_drill_answer(self, answer: str):
+    pass
+
+
+def give_up_drill(self):
+    pass
 
 
 class Challenge:

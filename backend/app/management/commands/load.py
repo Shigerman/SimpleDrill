@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         management.call_command('flush', verbosity=0, interactive=True)
-        management.call_command('loaddata', 'devdrill_db.json', verbosity=0)
+        #management.call_command('loaddata', 'simpledrill_db.json', verbosity=0)
 
         files_to_load = files('backend.app.fixtures').glob('*.json')
 
