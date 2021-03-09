@@ -162,6 +162,11 @@ def drill_topic(request, visitor):
     return visitor.show_challenge()
 
 
-def render_challenge(challenge):
-    context = {}
+def render_challenge(challenge, is_failure=None):
+    context = {
+        'question': challenge.question.question_text,
+        'answers': challenge.answers,
+        'explanation': challenge.question.explanation_text,
+        'is_failure': is_failure,
+    }
     return render(get_current_request(), 'drill_topic.html', context)

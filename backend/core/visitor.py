@@ -250,7 +250,7 @@ class Visitor:
 
 
     def show_challenge(self):
-        challenge = get_current(self)
+        challenge = get_current_challenge(self)
         if not challenge:
             challenge = get_next_challenge(self)
             # write into db 4 answers belonging to the last question shown
@@ -287,15 +287,16 @@ def get_next_challenge(visitor):
     # When a new topic is chosen by the user, all questions in this topic
     # are written into ChallengSummary db table for this user, and can
     # then be answered by the user many times (times are counted).
-    if len(user_topic_questions) == 0:
-        set_topic_challenges(topic=topic)
+    if len(user_topic_challenges) == 0:
+        set_topic_challenges(visitor, topic=topic)
 
     # Select next question based on challenge history: the one that was
     # asked less number of times.
     asked_counts: list[int] = \
         [challenge.asked_count for challenge in user_topic_challenges]
-    min_asked_count = min(asked_counts)
-    challenges_to_show = [challenge for challenge in user_topic_challenges if challenge.asked_count == min_asked_count]
+    min_asked_count = min(asked_counts, default=0)
+    challenges_to_show = [challenge for challenge in user_topic_challenges
+        if challenge.asked_count == min_asked_count]
     challenge.question = next(iter(challenges_to_show)).question
 
     # choose four random answers frim the question answer set
@@ -331,16 +332,21 @@ def set_topic_challenges(visitor, topic):
 
     for question in topic_questions:
         ChallengeSummary(
-            person=self.person,
+            person=visitor.person,
             question=question).save()
 
 
-def submit_drill_answer(self, answer: str):
+def submit_drill_answer(visitor, answer: str):
     pass
 
 
-def give_up_drill(self):
-    pass
+def give_up_drill(visitor):
+    challenge = core.challenge.get_current_challenge(visitor)
+    if not challenge:
+        raise AssertionError("Answer submit without challenge")
+
+    challenge.disclose_answers = True
+    return views.render_challenge(challenge, is_failure = True)
 
 
 class Challenge:
