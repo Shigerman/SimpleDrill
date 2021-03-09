@@ -254,26 +254,24 @@ class Visitor:
         if not challenge:
             challenge = get_next_challenge(self)
             # write into db 4 answers belonging to the last question shown
-            # to user so that to get back to the question if user makes
-            # a pause in drilling
+            # to user to get back to the question if user makes a pause
             set_current_challenge(self, challenge)
-
         return views.render_challenge(challenge)
 
 
-def get_current_challenge(self):
-    saved_answers = CurrentAnswers.objects.filter(person=self.person)
+def get_current_challenge(visitor):
+    saved_answers = CurrentAnswers.objects.filter(person=visitor.person)
     if not saved_answers:
         return None
 
-    challenge = Challenge(self.person)
+    challenge = Challenge(visitor)
     # Don't keep question in DB, infer it from answer
     first_answer = next(iter(saved_answers))
     challenge.question = Answer.objects.get(pk=first_answer.answer_id).question
     challenge.answers = [
         Answer.objects.get(pk=answer.answer_id) for answer in saved_answers
     ]
-    challenge.disclose_answers = self.person.disclose_answers
+    challenge.disclose_answers = visitor.person.disclose_answers
 
     return challenge
 
@@ -315,8 +313,8 @@ def get_next_challenge(visitor):
 
 
 def set_current_challenge(visitor, challenge):
-    # write into db 4 answers belonging to the last question shown to user
-    # in the beginning delete old answers if there are any
+    # Write into db 4 answers belonging to the last question shown to user.
+    # But in the beginning delete old answers if there are any.
     CurrentAnswers.objects.filter(person=visitor.person).delete()
     for answer in challenge.answers:
         CurrentAnswers(person=visitor.person, answer=answer).save()
@@ -331,17 +329,40 @@ def set_topic_challenges(visitor, topic):
         raise Exception("500 internal server error")
 
     for question in topic_questions:
-        ChallengeSummary(
-            person=visitor.person,
-            question=question).save()
+        ChallengeSummary(person=visitor.person, question=question).save()
 
 
-def submit_drill_answer(visitor, answer: str):
-    pass
+def submit_drill_answer(visitor, answer_id=None, no_correct_answer=None):
+    challenge = get_current_challenge(visitor)
+
+    if not challenge:
+        raise AssertionError("Answer submit without challenge")
+
+    if no_correct_answer is not None:
+        challenge.disclose_answers = True
+        if any(v.is_correct for v in challenge.answers):
+            set_current_challenge(visitor, challenge)
+            return views.render_challenge(challenge, is_failure=True)
+        else:
+            return views.render_challenge(challenge, is_failure=False)
+
+    else:
+        is_specified = lambda v: v.pk == answer_id
+        answer = next(filter(is_specified, challenge.answers), None)
+        if not answer:
+            return views.render_challenge(challenge,
+                with_error="The submitted answer does not match current \
+                    question. Try again on this page with actual answers.")
+        challenge.disclose_answers = True
+        if answer.is_correct:
+            return views.render_challenge(challenge, is_failure = False)
+        else:
+            set_current_challenge(visitor, challenge)
+            return views.render_challenge(challenge, is_failure = True)
 
 
 def give_up_drill(visitor):
-    challenge = core.challenge.get_current_challenge(visitor)
+    challenge = get_current_challenge(visitor)
     if not challenge:
         raise AssertionError("Answer submit without challenge")
 

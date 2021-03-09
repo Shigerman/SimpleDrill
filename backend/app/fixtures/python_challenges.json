@@ -12,7 +12,7 @@
   },
   { "topic": "python",
     "q": "What statement is correct to check if a word is a keyword?",
-    "th": "To check if a word is a keyword use keyword.iskeyword('for').",
+    "th": "To check if a word is a keyword use keyword.iskeyword('for') or 'for' in keyword.kwlist.",
     "+": [
       "keyword.iskeyword('for')",
       "'for' in keyword.kwlist"

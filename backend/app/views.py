@@ -157,16 +157,17 @@ def drill_topic(request, visitor):
     elif answer_choice == 'no_correct_answer':
         return visitor.submit_drill_answer(no_correct_answer=True)
     elif answer_choice:
-        answer_id = int(answer_choice) # need to have it as digit
-        visitor.submit_drill_answer(answer_id=answer_id)
+        answer_id = int(answer_choice) # need to get answer as digit
+        return core.visitor.submit_drill_answer(visitor, answer_id=answer_id)
     return visitor.show_challenge()
 
 
-def render_challenge(challenge, is_failure=None):
+def render_challenge(challenge, is_failure=None, with_error=None):
     context = {
         'question': challenge.question.question_text,
         'answers': challenge.answers,
         'explanation': challenge.question.explanation_text,
+        'disclose_answers': challenge.disclose_answers,
         'is_failure': is_failure,
     }
     return render(get_current_request(), 'drill_topic.html', context)
