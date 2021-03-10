@@ -252,10 +252,13 @@ class Visitor:
     def show_challenge(self):
         challenge = get_current_challenge(self)
         if not challenge:
-            challenge = get_next_challenge(self)
-            # write into db 4 answers belonging to the last question shown
-            # to user to get back to the question if user makes a pause
-            set_current_challenge(self, challenge)
+            return get_next_challenge(self)
+        return views.render_challenge(challenge)
+
+
+    def get_next_challenge(self):
+        challenge = get_new_challenge(self)
+        set_new_challenge(self, challenge)
         return views.render_challenge(challenge)
 
 
@@ -276,7 +279,7 @@ def get_current_challenge(visitor):
     return challenge
 
 
-def get_next_challenge(visitor):
+def get_new_challenge(visitor):
     challenge = Challenge(visitor)
     topic = visitor.person.challenge_topic
     user_topic_challenges = ChallengeSummary.objects.filter(
@@ -297,7 +300,7 @@ def get_next_challenge(visitor):
         if challenge.asked_count == min_asked_count]
     challenge.question = next(iter(challenges_to_show)).question
 
-    # choose four random answers frim the question answer set
+    # choose four random answers from the question answer set
     answers_to_question = list(challenge.question.answer_set.all())
     answers_on_screen = 4
     challenge.answers = random.sample(answers_to_question, answers_on_screen)
@@ -308,13 +311,13 @@ def get_next_challenge(visitor):
         question=challenge.question)
     record.asked_count += 1
     record.save()
-
     return challenge
 
 
-def set_current_challenge(visitor, challenge):
-    # Write into db 4 answers belonging to the last question shown to user.
-    # But in the beginning delete old answers if there are any.
+def set_new_challenge(visitor, challenge):
+    # Write into db 4 answers belonging to the last question shown
+    # to user to get back to the question if user makes a pause.
+    # But in the beginning delete any old answers.
     CurrentAnswers.objects.filter(person=visitor.person).delete()
     for answer in challenge.answers:
         CurrentAnswers(person=visitor.person, answer=answer).save()
@@ -341,7 +344,7 @@ def submit_drill_answer(visitor, answer_id=None, no_correct_answer=None):
     if no_correct_answer is not None:
         challenge.disclose_answers = True
         if any(v.is_correct for v in challenge.answers):
-            set_current_challenge(visitor, challenge)
+            set_new_challenge(visitor, challenge)
             return views.render_challenge(challenge, is_failure=True)
         else:
             return views.render_challenge(challenge, is_failure=False)
@@ -357,7 +360,7 @@ def submit_drill_answer(visitor, answer_id=None, no_correct_answer=None):
         if answer.is_correct:
             return views.render_challenge(challenge, is_failure = False)
         else:
-            set_current_challenge(visitor, challenge)
+            set_new_challenge(visitor, challenge)
             return views.render_challenge(challenge, is_failure = True)
 
 

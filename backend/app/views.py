@@ -151,13 +151,14 @@ def drill_topic(request, visitor):
     answer_choice = request.GET.get('choice')
 
     if request.GET.get('next') == "next":
-        return visitor.get_next_challenge()
+        return core.Visitor.get_next_challenge(visitor)
     elif answer_choice == 'dont_know':
-        return visitor.give_up_drill()
+        return core.visitor.give_up_drill(visitor)
     elif answer_choice == 'no_correct_answer':
-        return visitor.submit_drill_answer(no_correct_answer=True)
+        return core.visitor.submit_drill_answer(visitor,
+            no_correct_answer=True)
     elif answer_choice:
-        answer_id = int(answer_choice) # need to get answer as digit
+        answer_id = int(answer_choice) # need to get the answer as digit
         return core.visitor.submit_drill_answer(visitor, answer_id=answer_id)
     return visitor.show_challenge()
 
