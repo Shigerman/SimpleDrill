@@ -1,7 +1,7 @@
 # simpledrill
 A service to learn programming based on exercise repetition.
 
-## instruments used
+### instruments used
 * Python and Django for backend
 * Numl framework for frontend
 * Poetry for virtual environment

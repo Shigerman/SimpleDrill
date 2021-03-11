@@ -302,7 +302,7 @@
       "poetry start script.py"
     ]
   },
-  { "topic": "pythonv",
+  { "topic": "python",
     "q": "What command helps to check how many identifiers refence an object?",
     "th": "Python counts how many identifiers reference each object with the help of print(sys.getrefcount(a)) command. When reference count reaches 0, object is removed by the garbage collector.",
     "+": ["print(sys.getrefcount(a))"],
