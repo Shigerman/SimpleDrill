@@ -16,6 +16,12 @@
         {% endif %}
         </nu-card>
 
+        {% if error_msg %}
+        <nu-card height="10" width="21" place="center" fill="hue(12)">
+          {{ error_msg }}
+        </nu-card>
+        {% endif %}
+
         {% if disclose_answers %}
         <nu-cardbtn height="8" fill="#306998" color="white">
             <a id="next" href="/drill_topic?next=next"></a>
@@ -30,14 +36,24 @@
         {% endif %}
 
         <nu-flex height="4" width="21">
-        <nu-btn height="4" width="5" place="center" fill="#ffd43b" size="lg" color="dark grey">
-            <a href="/drill_topic?choice=dont_know"></a>Help</nu-btn>
+            <nu-btn height="4" width="5" place="center" fill="#ffd43b" size="lg" color="dark grey">
+                {% if disclose_answers %}
+                    Help
+                {% else %}
+                    <a href="/drill_topic?choice=dont_know"></a>Help
+                {% endif %}
+            </nu-btn>
 
-        <nu-btn height="4" width="11" place="center" fill="#ffd43b" size="lg" color="dark grey">
-            <a href="/drill_topic?choice=no_correct_answer"></a>No correct answer</nu-btn>
+            <nu-btn height="4" width="11" place="center" fill="#ffd43b" size="lg" color="dark grey">
+                {% if disclose_answers %}
+                    No correct answer
+                {% else %}
+                    <a href="/drill_topic?choice=no_correct_answer"></a>No correct answer
+                {% endif %}
+            </nu-btn>
 
-        <nu-btn height="4" width="5" place="center" fill="#ffd43b" size="lg" color="dark grey">
-            <a href="/select_topic"></a>End</nu-btn>
+            <nu-btn height="4" width="5" place="center" fill="#ffd43b" size="lg" color="dark grey">
+                <a href="/select_topic"></a>End</nu-btn>
         </nu-flex>
     </nu-flex>
 

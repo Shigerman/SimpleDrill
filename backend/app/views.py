@@ -170,5 +170,6 @@ def render_challenge(challenge, is_failure=None, with_error=None):
         'explanation': challenge.question.explanation_text,
         'disclose_answers': challenge.disclose_answers,
         'is_failure': is_failure,
+        'error_msg': with_error,
     }
     return render(get_current_request(), 'drill_topic.html', context)

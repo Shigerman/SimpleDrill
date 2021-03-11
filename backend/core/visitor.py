@@ -244,15 +244,18 @@ class Visitor:
 
 
     def want_to_drill(self, topic: str):
-        self.person.challenge_topic = topic
-        self.person.save()
+        # if topic is new, delete answers saved for previous topic
+        if self.person.challenge_topic != topic:
+            CurrentAnswers.objects.filter(person=self.person).delete()
+            self.person.challenge_topic = topic
+            self.person.save()
         return redirect("/drill_topic")
 
 
     def show_challenge(self):
         challenge = get_current_challenge(self)
         if not challenge:
-            return get_next_challenge(self)
+            return self.get_next_challenge()
         return views.render_challenge(challenge)
 
 
@@ -299,6 +302,7 @@ def get_new_challenge(visitor):
     challenges_to_show = [challenge for challenge in user_topic_challenges
         if challenge.asked_count == min_asked_count]
     challenge.question = next(iter(challenges_to_show)).question
+
 
     # choose four random answers from the question answer set
     answers_to_question = list(challenge.question.answer_set.all())
