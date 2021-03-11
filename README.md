@@ -1,6 +1,12 @@
 # simpledrill
 A service to learn programming based on exercise repetition.
 
+## instruments used
+* Python and Django for backend
+* Numl framework for frontend
+* Poetry for virtual environment
+* Pytest for testing
+
 ### screens layout
 Homepage screen elements:
 * 'Register' button
@@ -11,10 +17,10 @@ Homepage screen elements:
 Drilling screen elements:
 * question and explanation texts
 * four answers
-* 'D/Q' button meaning 'I don't know'
-* 'N/A' button meaning 'no correct options available'
-* 'End' button, which returns to the homepage screen
-* 'Next question' button (to implement later)
+* 'Help' button meaning 'I don't know'
+* 'No correct answer' button meaning
+* 'End' button, which returns to the 'select topic' screen
+* 'Next question' button
 
 Explain test screen elements:
 * Test process or result explanation
@@ -24,6 +30,8 @@ Test screen elements:
 * question
 * answer field
 * 'Submit' button
+* "I don't know" button
+
 
 ### activity algorithms
 * Correct answer >>> show correct answer and its explanation >>> next question
