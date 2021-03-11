@@ -26,6 +26,7 @@ urlpatterns = [
     path('add_invite/', backend.app.views.add_invite),
     path('login_visitor/', backend.app.views.login_visitor),
     path('logout_visitor/', backend.app.views.logout_visitor),
+    path('about/', backend.app.views.about),
     path('select_topic/', backend.app.views.select_topic),
     path('drill_topic/', backend.app.views.drill_topic),
     path('explain_test/', backend.app.views.explain_test),

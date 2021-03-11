@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<nu-flex flow="column" content="center">
+    <nu-flex content="center" height="30">
+        <nu-flex flow="column" content="center" width="60">
+
+            <nu-flex flow="row-reverse" content="start" height="5">
+                <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
+                    <a href="/"> </a>Homepage</nu-btn>
+            </nu-flex>
+
+            <br><br>
+
+            <nu-flex flow="column" items="center" width="60">
+                <nu-card content="center" height="20" width="40" fill="#306998" color="white">
+                    <p>This application was contrived in the turbulent
+                    year of 2020 by software engineers 
+                    Grigory Petrov and Larisa Shigareva.</p>
+
+                    <p>It was intended to verify our hypothesis concerning
+                    the principles of remembering things based on repetition.
+                    Well, it is an old truth. So we decided to find out how
+                    many repetitions exactly one needes and how often one
+                    needs to make them to remember intricate facts from
+                    the world of IT.</p>
+
+                    <p>The application was created solely in the English
+                    language as we believe English to be a prerequisite
+                    for a professional in the IT sphere.</p>
+                </nu-card>
+            </nu-flex>
+
+        </nu-flex>
+    </nu-flex>
+</nu-flex>
+
+{% endblock %}

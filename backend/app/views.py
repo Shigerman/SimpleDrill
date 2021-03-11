@@ -22,6 +22,10 @@ def homepage(request, visitor):
     return render(request, 'homepage.html')
 
 
+def about(request):
+    return render(get_current_request(), 'about.html')
+
+
 def register_visitor(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
