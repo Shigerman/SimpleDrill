@@ -47,6 +47,7 @@ class TestSummary(models.Model):
     def __str__(self):
         return f"{self.person.user.username}, {self.topic}, \
             \"{self.test_question.test_question[:40]}\", \
+            {self.test_question.test_answer} VS {self.user_answer}, \
             {self.is_user_answer_correct}"
 
 
