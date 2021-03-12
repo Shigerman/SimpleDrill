@@ -1,4 +1,5 @@
 from collections import namedtuple
+from itertools import cycle
 import os
 import random
 import urllib
@@ -196,7 +197,7 @@ class Visitor:
         elif self.visitor_did_final_test():
             return None
         elif final_question_user_count == 0 and countdown <= 0:
-            set_test_steps(visitor, topic='final')
+            self.set_test_steps(topic='final')
         return next(iter(not_answered_test_steps), None)
 
 
@@ -285,24 +286,22 @@ def get_current_challenge(visitor):
 def get_new_challenge(visitor):
     challenge = Challenge(visitor)
     topic = visitor.person.challenge_topic
-    user_topic_challenges = ChallengeSummary.objects.filter(
+    topic_challenges = ChallengeSummary.objects.filter(
             person=visitor.person, question__topic=topic)
 
     # When a new topic is chosen by the user, all questions in this topic
-    # are written into ChallengSummary db table for this user, and can
-    # then be answered by the user many times (times are counted).
-    if len(user_topic_challenges) == 0:
+    # are written into ChallengSummary db table for this user.
+    if len(topic_challenges) == 0:
         set_topic_challenges(visitor, topic=topic)
 
-    # Select next question based on challenge history: the one that was
-    # asked less number of times.
+    # Select the question that was asked less number of times.
     asked_counts: list[int] = \
-        [challenge.asked_count for challenge in user_topic_challenges]
+        [challenge.asked_count for challenge in topic_challenges]
     min_asked_count = min(asked_counts, default=0)
-    challenges_to_show = [challenge for challenge in user_topic_challenges
-        if challenge.asked_count == min_asked_count]
-    challenge.question = next(iter(challenges_to_show)).question
 
+    challenges_to_show = [challenge for challenge in topic_challenges
+        if challenge.asked_count == min_asked_count]
+    challenge.question = next(cycle(challenges_to_show)).question
 
     # choose four random answers from the question answer set
     answers_to_question = list(challenge.question.answer_set.all())
