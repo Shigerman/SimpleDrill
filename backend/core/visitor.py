@@ -293,15 +293,17 @@ def get_new_challenge(visitor):
     # are written into ChallengSummary db table for this user.
     if len(topic_challenges) == 0:
         set_topic_challenges(visitor, topic=topic)
+        topic_challenges = ChallengeSummary.objects.filter(
+            person=visitor.person, question__topic=topic)
 
     # Select the question that was asked less number of times.
     asked_counts: list[int] = \
         [challenge.asked_count for challenge in topic_challenges]
     min_asked_count = min(asked_counts, default=0)
 
-    challenges_to_show = [challenge for challenge in topic_challenges
-        if challenge.asked_count == min_asked_count]
-    challenge.question = next(cycle(challenges_to_show)).question
+    challenges_to_show = cycle([challenge for challenge in topic_challenges
+        if challenge.asked_count == min_asked_count])
+    challenge.question = next(challenges_to_show).question
 
     # choose four random answers from the question answer set
     answers_to_question = list(challenge.question.answer_set.all())
