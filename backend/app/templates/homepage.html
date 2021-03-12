@@ -8,12 +8,12 @@
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="logout_visitor"> </a>Logout</nu-btn>
+                    <a href="about"> </a>About</nu-btn>
             </nu-flex>
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="about"> </a>About</nu-btn>
+                    <a href="logout_visitor"> </a>Logout</nu-btn>
             </nu-flex>
 
             {% if user.is_staff %}
@@ -28,7 +28,7 @@
                     <a href="select_topic"> </a>Drill</nu-btn>
 
                 <nu-btn height="7" width="20" size="lg" fill="#ffd43b" color="dark grey">
-                    <a href="explain_test"> </a>Take the test</nu-btn>
+                    <a href="explain_test"> </a>{{ button_test_info }}</nu-btn>
             </nu-flex>
 
         </nu-flex>

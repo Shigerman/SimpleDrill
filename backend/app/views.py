@@ -19,7 +19,12 @@ def need_logged_in_visitor(handler):
 
 @need_logged_in_visitor
 def homepage(request, visitor):
-    return render(request, 'homepage.html')
+    return visitor.get_button_test_info()
+
+
+def render_homepage(button_test_info):
+    context = {'button_test_info': button_test_info}
+    return render(get_current_request(), 'homepage.html', context)
 
 
 def about(request):
@@ -111,14 +116,15 @@ def explain_test(request, visitor):
 def render_explain_test(test_explanation):
     context = {
         'explanation_text': test_explanation.text.split("\n"),
-        'page_to_go_to': test_explanation.page_to_go_to
+        'page_to_go': test_explanation.page_to_go,
+        'button_text': test_explanation.button_text,
     }
     return render(get_current_request(), 'explain_test.html', context)
 
 
 @need_logged_in_visitor
 def select_topic(request, visitor):
-    # user must take the start test before drilling topics
+    # user has to take the start test before drilling topics
     if not visitor.visitor_did_start_test():
         return redirect("/explain_test")
     topic = request.GET.get('topic')

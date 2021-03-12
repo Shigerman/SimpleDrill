@@ -82,32 +82,51 @@ class Visitor:
         return redirect("/")
 
 
+    def get_button_test_info(self):
+        user_challenges = self.count_user_challenges()
+        countdown = self.get_countdown_to_final_test()
+
+        if not user_challenges and not self.visitor_did_start_test():
+            button_test_info = "Take the start test"
+        elif countdown > 0:
+            button_test_info = f"{countdown} drills until final test"
+        elif self.visitor_did_final_test():
+            button_test_info = "View test scores"
+        else:
+            button_test_info = "Take the final test"
+        return views.render_homepage(button_test_info)
+
+
     def show_test_explanation_before_test(self):
         user_challenges_count = self.count_user_challenges()
         countdown = self.get_countdown_to_final_test()
 
         start_test_score, final_test_score = self.count_test_score()
-        Explanation = namedtuple('Explanation', 'text page_to_go_to')
+        Explanation = namedtuple('Explanation', 'text page_to_go button_text')
 
         if not user_challenges_count and not self.visitor_did_start_test():
             text = ("We recommend that you take our test before you start" +
                 " Python drills.")
-            page_to_go_to = "/test"
+            page_to_go = "/test"
+            button_text = "Take the start test"
         elif countdown > 0:
             text = (f"Your start test score: {start_test_score}.\nAfter " +
                 f"doing {countdown} drills you will be able to take the " +
                 "test again.\nGo and practice!")
-            page_to_go_to = "/select_topic"
+            page_to_go = "/select_topic"
+            button_text = "Go and practice!"
         elif self.visitor_did_final_test():
             text = ("Congratulations!\nYou have completed all the tests."
                 + f"\nYour start test score: {start_test_score}.\nYour final "
                 +f"test score: {final_test_score}.")
-            page_to_go_to = "/select_topic"
+            page_to_go = "/select_topic"
+            button_text = "Go and practice!"
         else:
             text = ("You have done a lot of drilling.\n" +
                 "It is time to take your final test.")
-            page_to_go_to = "/test"
-        test_explanation = Explanation(text,page_to_go_to)
+            page_to_go = "/test"
+            button_text = "Take the final test"
+        test_explanation = Explanation(text,page_to_go,button_text)
         return views.render_explain_test(test_explanation)
 
 
