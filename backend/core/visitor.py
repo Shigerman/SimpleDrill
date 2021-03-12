@@ -101,7 +101,7 @@ class Visitor:
         elif self.visitor_did_final_test():
             text = ("Congratulations!\nYou have completed all the tests."
                 + f"\nYour start test score: {start_test_score}.\nYour final "
-                +f"test score: {final_test_score}.\nGo and practice more!")
+                +f"test score: {final_test_score}.")
             page_to_go_to = "/select_topic"
         else:
             text = ("You have done a lot of drilling.\n" +

@@ -18,22 +18,21 @@
 <nu-root>
     <nu-flex flow="column" content="center" items="center" height="40">
         <nu-form id="submit_my_test_answer">
-            <nu-card content="center" height="12" width="28" fill="#306998" color="white" overflow="scroll">
+            <nu-card content="center" height="14" width="28" fill="#306998" color="white" overflow="auto">
 
                 {% if start_score %}
                     {% if final_score %}
-                        Your start test score: {{ start_score }}
-                        <br>
-                        Your final test score: {{ final_score }}
-                        <br>
-                        <br>
                         Congratulations! You have completed all the tests.
+                        <br><br>
+                        Your start test score: {{ start_score }}
+                        <br><br>
+                        Your final test score: {{ final_score }}
+                        <br><br>
                         Go and practice more!
                         </nu-card>
                     {% else %}
                     Your start test score: {{ start_score }}
-                    <br>
-                    <br>
+                    <br><br>
                     Go and practice!
                     </nu-card>
                     {% endif %}
@@ -45,13 +44,11 @@
                     {% endfor %}
                     </nu-card>
 
-                    <br>
                     <nu-flex flow="row wrap" gap>
                         <nu-input id="test_answer" height="5" width="28"></nu-input>
                     </nu-flex>
                 {% endif %}
 
-                    <br>
                 {% if start_score %}
                     <nu-btn height="5" width="28" size="lg" fill="#ffd43b" color="dark grey">
                         <a href="/select_topic"></a>Go and practice!
@@ -67,6 +64,11 @@
                     <a id="btn_submit_answer" href="#"> </a>Submit answer
                 </nu-btn>
             </nu-flex>
+
+            <br><br>
+
+            <nu-btn height="4" width="28" size="lg" fill="grey" color="white">
+                <a href="/"></a>Pause</nu-btn>
             {% endif %}
 
 
