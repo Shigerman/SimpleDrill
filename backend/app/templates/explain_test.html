@@ -2,17 +2,29 @@
 
 {% block body %}
 
-<nu-flex flow="column" content="center" items="center" height="40">
-    <nu-card content="center" height="14" width="27" fill="#306998" color="white" overflow="auto">
-        {% for item in explanation_text %}
-            <p> {{ item }} </p>
-        {% endfor %}
-    </nu-card>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        window.addEventListener("keyup", e => {
+            switch(e.keyCode) {
+                case 13: return document.getElementById("btn_submit").click();
+             } // enter
+        });
+    });
+</script>
 
-    <br></br>
+<nu-root>
+    <nu-flex flow="column" content="center" items="center" height="40">
+        <nu-card content="center" height="14" width="27" fill="#306998" color="white" overflow="auto">
+            {% for item in explanation_text %}
+                <p> {{ item }} </p>
+            {% endfor %}
+        </nu-card>
 
-    <nu-btn height="5" width="27" size="lg" fill="#ffd43b" color="dark grey">
-        <a href={{page_to_go}}></a> </a>{{ button_text }}</nu-btn>
-</nu-flex>
+        <br></br>
+
+        <nu-btn height="5" width="27" size="lg" fill="#ffd43b" color="dark grey">
+            <a id="btn_submit" action="submit" href={{page_to_go}}></a> </a>{{ button_text }}</nu-btn>
+    </nu-flex>
+</nu-root>
 
 {% endblock %}

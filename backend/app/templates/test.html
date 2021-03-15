@@ -4,15 +4,20 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        btn_submit = document.getElementById("btn_submit_answer");
-        btn_submit.addEventListener("click", () => {
-            test_answer = document.getElementById("test_answer").value;
-            if (!test_answer) return;
-            test_answer_safe = encodeURIComponent(test_answer);
-            url = `/test?test_answer=${test_answer_safe}`;
-            window.location.href = url;
+        const form_submit_answer =
+            document.getElementById("submit_my_test_answer");
+        form_submit_answer.addEventListener("input", (e) => {
+            const args = Object.entries(e.detail).map(([key, val]) => {
+                return `${encodeURIComponent(key)}=${encodeURIComponent(val)}`;
+            }).join("&");
+            window.location.href = `?${args}`;
         });
     });
+    window.addEventListener("keyup", e => {
+    switch(e.keyCode) {
+        case 13: return document.getElementById("btn_submit").click();
+        } // enter
+        });
 </script>
 
 <nu-root>
@@ -51,7 +56,7 @@
 
                 {% if start_score %}
                     <nu-btn height="5" width="28" size="lg" fill="#ffd43b" color="dark grey">
-                        <a href="/select_topic"></a>Go and practice!
+                        <a id="btn_submit" action="submit" href="/select_topic"></a>Go and practice!
                     </nu-btn>
             
             {% else %}
@@ -60,19 +65,18 @@
                     <a id="no_answer" href="/test?test_answer=no_answer"> </a>I don't know
                 </nu-btn>
 
-                <nu-btn height="5" width="14" size="lg" fill="#ffd43b" color="dark grey">
-                    <a id="btn_submit_answer" href="#"> </a>Submit answer
+                <nu-btn action="submit" height="5" width="14" size="lg" fill="#ffd43b" color="dark grey">
+                    Submit answer
                 </nu-btn>
             </nu-flex>
 
             <br><br>
 
             <nu-btn height="4" width="28" size="lg" fill="grey" color="white">
-                <a href="/"></a>Pause</nu-btn>
+                <a href="/"></a>Pause
+            </nu-btn>
             {% endif %}
-
-
-
+            <br>
         </nu-form>
     </nu-flex>
 </nu-root>

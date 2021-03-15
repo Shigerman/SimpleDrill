@@ -2,6 +2,16 @@
 
 {% block body %}
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        window.addEventListener("keyup", e => {
+            switch(e.keyCode) {
+                case 13: return document.getElementById("next").click();
+             } // enter
+        });
+    });
+</script>
+
 <nu-root>
 <nu-flex flow="column" content="center">
     <nu-flex content="center" height="40">

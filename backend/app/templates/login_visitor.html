@@ -4,9 +4,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        btn_login = document.getElementById("login_me");
-        btn_login.addEventListener("input", (e) => {
-            console.log(e.detail);
+        const form_login = document.getElementById("login_me");
+        form_login.addEventListener("input", (e) => {
             const args = Object.entries(e.detail).map(([key, val]) => {
                 return `${encodeURIComponent(key)}=${encodeURIComponent(val)}`;
             }).join("&");
@@ -20,12 +19,12 @@
         <nu-flex content="center" height="35">
             <nu-flex flow="column" content="center" width="60">
 
-                <nu-form id="login_me">
                     <nu-flex flow="row-reverse" content="start" height="6">
                         <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
                             <a href="/register_visitor"> </a>  Register </nu-btn>
                     </nu-flex>
 
+                    <nu-form id="login_me">
                     <nu-flex flow="row" content="center" items="center">
                         <nu-card height="4" width="15" place="center">
                             <p> User name: </p></nu-card>
@@ -59,7 +58,7 @@
                     {% endif %}
 
                     <nu-flex flow="column" items="center" width="60">
-                        <nu-btn special action="submit" height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">
+                        <nu-btn action="submit" height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">
                             Login
                         </nu-btn>
                     </nu-flex>
