@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from threadlocals.threadlocals import get_current_request
 
 from backend import core
-from .models import Person, Invite
+from .models import Person, Invite, TestSummary
 
 
 def need_logged_in_visitor(handler):
@@ -18,11 +18,11 @@ def need_logged_in_visitor(handler):
 
 
 @need_logged_in_visitor
-def homepage(request, visitor):
+def homepage(request, visitor: core.Visitor):
     return visitor.get_button_test_info()
 
 
-def render_homepage(button_test_info):
+def render_homepage(button_test_info: str):
     context = {'button_test_info': button_test_info}
     return render(get_current_request(), 'homepage.html', context)
 
@@ -48,7 +48,10 @@ def register_visitor(request):
         return render_register_visitor(empty_field=True, invalid_code=False)
 
 
-def render_register_visitor(empty_field=False, invalid_code=False):
+def render_register_visitor(
+        empty_field: bool = False,
+        invalid_code: bool = False):
+
     context = {
         "empty_field": empty_field,
         "invalid_code": invalid_code,
@@ -71,26 +74,26 @@ def login_visitor(request):
         return render_login_visitor(invalid_credentials=True)
 
 
-def render_login_visitor(invalid_credentials=False):
+def render_login_visitor(invalid_credentials: bool = False):
     context = {"invalid_credentials": invalid_credentials}
     return render(get_current_request(), 'login_visitor.html', context)
 
 
 @need_logged_in_visitor
-def logout_visitor(request, visitor):
+def logout_visitor(request, visitor: core.Visitor):
     return visitor.logout()
 
 
-def connect_person_to_session(person):
+def connect_person_to_session(person: Person):
     django.contrib.auth.login(get_current_request(), person.user)
 
 
-def disconnect_person_from_session(person):
+def disconnect_person_from_session(person: Person):
     django.contrib.auth.logout(get_current_request())
 
 
 @need_logged_in_visitor
-def add_invite(request, visitor):
+def add_invite(request, visitor: core.Visitor):
     comment = request.GET.get('comment')
     if not comment:
         return redirect("view_invites")
@@ -99,21 +102,21 @@ def add_invite(request, visitor):
 
 
 @need_logged_in_visitor
-def view_invites(request, visitor):
+def view_invites(request, visitor: core.Visitor):
     return visitor.show_invites()
 
 
-def render_invites(invites):
+def render_invites(invites: Invite):
     context = {'invites': invites}
     return render(get_current_request(), 'view_invites.html', context)
 
 
 @need_logged_in_visitor
-def explain_test(request, visitor):
+def explain_test(request, visitor: core.Visitor):
     return visitor.show_test_explanation_before_test()
 
 
-def render_explain_test(test_explanation):
+def render_explain_test(test_explanation: core.visitor.Explanation):
     context = {
         'explanation_text': test_explanation.text.split("\n"),
         'page_to_go': test_explanation.page_to_go,
@@ -123,7 +126,7 @@ def render_explain_test(test_explanation):
 
 
 @need_logged_in_visitor
-def select_topic(request, visitor):
+def select_topic(request, visitor: core.Visitor):
     # user has to take the start test before drilling topics
     if not visitor.visitor_did_start_test():
         return redirect("/explain_test")
@@ -134,20 +137,20 @@ def select_topic(request, visitor):
 
 
 @need_logged_in_visitor
-def test(request, visitor):
+def test(request, visitor: core.Visitor):
     test_answer = request.GET.get('test_answer')
     if not test_answer:
         return visitor.show_test_step()
     return visitor.submit_test_answer(test_answer)
 
 
-def render_test_step(test_step):
+def render_test_step(test_step: TestSummary):
     context = {'test_question':
         test_step.test_question.test_question.split("\n")}
     return render(get_current_request(), 'test.html', context)
 
 
-def render_test_score(test_score):
+def render_test_score(test_score: tuple):
     start_score, final_score = test_score
     context = {
         'start_score': start_score,
@@ -157,7 +160,7 @@ def render_test_score(test_score):
 
 
 @need_logged_in_visitor
-def drill_topic(request, visitor):
+def drill_topic(request, visitor: core.Visitor):
     answer_choice = request.GET.get('choice')
 
     if request.GET.get('next') == "next":
@@ -168,12 +171,14 @@ def drill_topic(request, visitor):
         return core.visitor.submit_drill_answer(visitor,
             no_correct_answer=True)
     elif answer_choice:
-        answer_id = int(answer_choice) # need to get the answer as digit
+        answer_id = int(answer_choice)  # need to get the answer as digit
         return core.visitor.submit_drill_answer(visitor, answer_id=answer_id)
     return visitor.show_challenge()
 
 
-def render_challenge(challenge, is_failure=None, with_error=None):
+def render_challenge(challenge: core.visitor.Challenge,
+        is_failure: bool = None, with_error: str = None):
+
     context = {
         'question': challenge.question.question_text,
         'answers': challenge.answers,

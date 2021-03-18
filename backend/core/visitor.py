@@ -16,6 +16,9 @@ from backend.app.models import TestSummary, TestStep, Answer, Question
 from backend.app import views
 
 
+Explanation = namedtuple('Explanation', 'text page_to_go button_text')
+
+
 class Visitor:
     """Represents web app visitor and their actions"""
 
@@ -65,7 +68,7 @@ class Visitor:
         return views.render_invites(invites)
 
 
-    def add_invite(self, comment):
+    def add_invite(self, comment: str):
         if not self.person.user.is_staff:
             return redirect("/login_visitor")
 
@@ -100,9 +103,7 @@ class Visitor:
     def show_test_explanation_before_test(self):
         user_challenges_count = self.count_user_challenges()
         countdown = self.get_countdown_to_final_test()
-
         start_test_score, final_test_score = self.count_test_score()
-        Explanation = namedtuple('Explanation', 'text page_to_go button_text')
 
         if not user_challenges_count and not self.visitor_did_start_test():
             text = ("We recommend that you take our test before you start" +
@@ -130,7 +131,7 @@ class Visitor:
         return views.render_explain_test(test_explanation)
 
 
-    def count_user_challenges(self):
+    def count_user_challenges(self) -> int:
         challenges = ChallengeSummary.objects.filter(person=self.person)
         challenges = [challenge.asked_count for challenge in challenges]
         return sum(challenges)
@@ -140,13 +141,13 @@ class Visitor:
         return int(os.environ['REPETITION_TARGET'])
 
 
-    def get_countdown_to_final_test(self):
+    def get_countdown_to_final_test(self) -> int:
         target_challenges = self.get_target_repetitions_count()
         user_challenges = self.count_user_challenges()
         return target_challenges - user_challenges
 
 
-    def count_test_score(self):
+    def count_test_score(self) -> tuple:
         start_question_count = len(TestStep.objects.filter(topic="start"))
         final_question_count = len(TestStep.objects.filter(topic="final"))
 
@@ -166,7 +167,7 @@ class Visitor:
             return (None, None)
 
 
-    def visitor_did_start_test(self):
+    def visitor_did_start_test(self) -> bool:
         start_question_count = len(TestStep.objects.filter(topic="start"))
         start_question_user_count = len(TestSummary.objects.filter(
             person=self.person, topic="start"))
@@ -179,7 +180,7 @@ class Visitor:
         return test_was_started and all_answered
 
 
-    def visitor_did_final_test(self):
+    def visitor_did_final_test(self) -> bool:
         test_question_count = len(TestStep.objects.all())
         test_question_user_count = len(
             TestSummary.objects.filter(person=self.person))
@@ -200,7 +201,7 @@ class Visitor:
         return views.render_test_step(test_step)
 
 
-    def get_test_step(self):
+    def get_test_step(self) -> TestStep:
         # User takes the start test before doing drills.
         # After doing the target number of drills, they can take final test.
         user_test_step_count = len(TestSummary.objects.filter(
@@ -220,7 +221,7 @@ class Visitor:
         return next(iter(not_answered_test_steps), None)
 
 
-    def set_test_steps(self, topic):
+    def set_test_steps(self, topic: str):
         test_questions_to_show = TestStep.objects.filter(topic=topic)
 
         if len(test_questions_to_show) == 0:
@@ -236,13 +237,13 @@ class Visitor:
                 topic=topic).save()
 
 
-    def submit_test_answer(self, test_answer: str):
+    def submit_test_answer(self, test_answer: str = None):
         if not test_answer:
             raise AssertionError("Test answer submit without a test question")
         return self.check_test_answer(test_answer)
     
 
-    def check_test_answer(self, test_answer=None):
+    def check_test_answer(self, test_answer: str = None):
         # Save True/False into db depending on answer correctness.
         # Also save the actual user answer to check our check correctness.
         test_step = self.get_test_step()
@@ -285,7 +286,18 @@ class Visitor:
         return views.render_challenge(challenge)
 
 
-def get_current_challenge(visitor):
+class Challenge:
+
+    def __init__(self, visitor):
+        self.visitor = visitor
+        self.question: Question = None
+        self.answers: list[Answer] = []
+        # If True, show correct/wrong answers after user answers wrongly
+        # or issued the "don't know" command
+        self.disclose_answers: bool = False
+
+
+def get_current_challenge(visitor: Visitor) -> Challenge:
     saved_answers = CurrentAnswers.objects.filter(person=visitor.person)
     if not saved_answers:
         return None
@@ -302,7 +314,7 @@ def get_current_challenge(visitor):
     return challenge
 
 
-def get_new_challenge(visitor):
+def get_new_challenge(visitor: Visitor):
     challenge = Challenge(visitor)
     topic = visitor.person.challenge_topic
     topic_challenges = ChallengeSummary.objects.filter(
@@ -338,7 +350,7 @@ def get_new_challenge(visitor):
     return challenge
 
 
-def set_new_challenge(visitor, challenge):
+def set_new_challenge(visitor: Visitor, challenge: Challenge):
     # Write into db 4 answers belonging to the last question shown
     # to user to get back to the question if user makes a pause.
     # But in the beginning delete any old answers.
@@ -349,7 +361,7 @@ def set_new_challenge(visitor, challenge):
     visitor.person.save()
 
 
-def set_topic_challenges(visitor, topic):
+def set_topic_challenges(visitor: Visitor, topic: str):
     topic_questions = Question.objects.filter(topic=topic)
 
     if len(topic_questions) == 0:
@@ -359,7 +371,8 @@ def set_topic_challenges(visitor, topic):
         ChallengeSummary(person=visitor.person, question=question).save()
 
 
-def submit_drill_answer(visitor, answer_id=None, no_correct_answer=None):
+def submit_drill_answer(visitor: Visitor, answer_id: int = None,
+        no_correct_answer: bool = None):
     challenge = get_current_challenge(visitor)
 
     if not challenge:
@@ -388,21 +401,10 @@ def submit_drill_answer(visitor, answer_id=None, no_correct_answer=None):
             return views.render_challenge(challenge, is_failure = True)
 
 
-def give_up_drill(visitor):
+def give_up_drill(visitor: Visitor):
     challenge = get_current_challenge(visitor)
     if not challenge:
         raise AssertionError("Answer submit without challenge")
 
     challenge.disclose_answers = True
     return views.render_challenge(challenge, is_failure = True)
-
-
-class Challenge:
-
-    def __init__(self, visitor):
-        self.visitor = visitor
-        self.question: Question = None
-        self.answers: list[Answer] = []
-        # If True, show correct/wrong answers after user answers wrongly
-        # or issued the "don't know" command
-        self.disclose_answers = False
