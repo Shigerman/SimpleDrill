@@ -113,7 +113,7 @@ def render_invites(invites: Invite):
 
 @need_logged_in_visitor
 def explain_test(request, visitor: core.Visitor):
-    return visitor.show_test_explanation_before_test()
+    return visitor.show_test_explanation()
 
 
 def render_explain_test(test_explanation: core.visitor.Explanation):

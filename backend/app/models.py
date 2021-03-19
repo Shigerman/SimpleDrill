@@ -42,13 +42,13 @@ class TestSummary(models.Model):
     test_question = models.ForeignKey(TestStep, on_delete=models.CASCADE)
     topic = models.TextField(default="")
     user_answer = models.CharField(max_length=50)
-    is_user_answer_correct = models.BooleanField(null=True)
+    is_correct = models.BooleanField(null=True)
 
     def __str__(self):
         return f"{self.person.user.username}, {self.topic}, \
             \"{self.test_question.test_question[:40]}\", \
             {self.test_question.test_answer} VS {self.user_answer}, \
-            {self.is_user_answer_correct}"
+            {self.is_correct}"
 
 
 class Question(models.Model):

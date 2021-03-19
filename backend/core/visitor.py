@@ -100,12 +100,12 @@ class Visitor:
         return views.render_homepage(button_test_info)
 
 
-    def show_test_explanation_before_test(self):
+    def show_test_explanation(self):
         user_challenges_count = self.count_user_challenges()
         countdown = self.get_countdown_to_final_test()
         start_test_score, final_test_score = self.count_test_score()
 
-        if not user_challenges_count and not self.visitor_did_start_test():
+        if not self.visitor_did_start_test():
             text = ("We recommend that you take our test before you start" +
                 " Python drills.")
             page_to_go = "/test"
@@ -152,9 +152,9 @@ class Visitor:
         final_question_count = len(TestStep.objects.filter(topic="final"))
 
         correct_answers_start = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=True, topic="start"))
+            person=self.person, is_correct=True, topic="start"))
         correct_answers_final = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=True, topic="final"))
+            person=self.person, is_correct=True, topic="final"))
 
         start_score = f"{correct_answers_start} of {start_question_count}"
         final_score = f"{correct_answers_final} of {final_question_count}"
@@ -174,7 +174,7 @@ class Visitor:
         test_was_started = start_question_count == start_question_user_count
 
         unanswered_questions = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=None))
+            person=self.person, is_correct=None))
         all_answered = unanswered_questions == 0
 
         return test_was_started and all_answered
@@ -187,7 +187,7 @@ class Visitor:
         tests_were_started = test_question_count == test_question_user_count
 
         unanswered_questions = len(TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=None))
+            person=self.person, is_correct=None))
         all_answered = unanswered_questions == 0
 
         return tests_were_started and all_answered
@@ -209,7 +209,7 @@ class Visitor:
         final_question_user_count = len(TestSummary.objects.filter(
             person=self.person, topic="final"))
         not_answered_test_steps = TestSummary.objects.filter(
-            person=self.person, is_user_answer_correct=None)
+            person=self.person, is_correct=None)
         countdown = self.get_countdown_to_final_test()
 
         if not user_test_step_count:
@@ -256,9 +256,9 @@ class Visitor:
             len(test_answer) <= (len(correct_test_answer) + 5)
 
         if is_correct_user_answer and user_answer_not_long:
-            test_step.is_user_answer_correct = True
+            test_step.is_correct = True
         else:
-            test_step.is_user_answer_correct = False
+            test_step.is_correct = False
         test_step.user_answer = test_answer
         test_step.save()
         return self.show_test_step()
@@ -351,9 +351,8 @@ def get_new_challenge(visitor: Visitor):
 
 
 def set_new_challenge(visitor: Visitor, challenge: Challenge):
-    # Write into db 4 answers belonging to the last question shown
-    # to user to get back to the question if user makes a pause.
-    # But in the beginning delete any old answers.
+    # Save 4 answers belonging to the last question shown to user to
+    # retrieve it if user makes a pause. Delete old answers before that.
     CurrentAnswers.objects.filter(person=visitor.person).delete()
     for answer in challenge.answers:
         CurrentAnswers(person=visitor.person, answer=answer).save()
