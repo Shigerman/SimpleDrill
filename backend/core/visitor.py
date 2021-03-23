@@ -194,11 +194,13 @@ class Visitor:
 
 
     def show_test_step(self):
-        test_step = self.get_test_step()
+        test_step: TestStep = self.get_test_step()
+        countdown: str = self.get_test_steps_countdown()
         if not test_step:
             test_score = self.count_test_score()
             return views.render_test_score(test_score)
-        return views.render_test_step(test_step)
+        # return a question and countdown line: e.g. "3 of 10"
+        return views.render_test_step(test_step, countdown)
 
 
     def get_test_step(self) -> TestStep:
@@ -208,9 +210,9 @@ class Visitor:
             person=self.person))
         final_question_user_count = len(TestSummary.objects.filter(
             person=self.person, topic="final"))
+        countdown = self.get_countdown_to_final_test()
         not_answered_test_steps = TestSummary.objects.filter(
             person=self.person, is_correct=None)
-        countdown = self.get_countdown_to_final_test()
 
         if not user_test_step_count:
             self.set_test_steps(topic='start')
@@ -219,6 +221,20 @@ class Visitor:
         elif final_question_user_count == 0 and countdown <= 0:
             self.set_test_steps(topic='final')
         return next(iter(not_answered_test_steps), None)
+
+
+    def get_test_steps_countdown(self) -> str:
+        # find out how many test steps are there in start/final tests
+        not_answered_steps = TestSummary.objects.filter(
+            person=self.person, is_correct=None)
+        if self.visitor_did_start_test():
+            steps_to_do = len(TestStep.objects.filter(topic="final"))
+        else:
+            steps_to_do = len(TestStep.objects.filter(topic="start"))
+
+        # we need to get a number user is currently doing, so we add 1
+        sequential_step_number = steps_to_do - len(not_answered_steps) + 1
+        return f"{sequential_step_number} of {steps_to_do}"
 
 
     def set_test_steps(self, topic: str):

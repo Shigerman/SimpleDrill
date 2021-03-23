@@ -144,9 +144,11 @@ def test(request, visitor: core.Visitor):
     return visitor.submit_test_answer(test_answer)
 
 
-def render_test_step(test_step: TestSummary):
-    context = {'test_question':
-        test_step.test_question.test_question.split("\n")}
+def render_test_step(test_step: TestSummary, countdown: str):
+    context = {
+        'test_question': test_step.test_question.test_question.split("\n"),
+        'countdown': countdown,
+    }
     return render(get_current_request(), 'test.html', context)
 
 
