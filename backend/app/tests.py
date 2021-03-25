@@ -2,7 +2,15 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from .models import Person, Invite, TestStep, Question, Answer
+from .models import TestSummary
 from backend import core
+
+
+SAMPLE_TESTQUESTION_TEXT = "How many characters are there in ASCII?"
+SAMPLE_QUESTION_TEXT = "What is a callable?"
+SAMPLE_EXPLANATION_TEXT = "Function"
+SAMPLE_TOPIC_TEXT = "git"
+
 
 def create_person():
     User = get_user_model()
@@ -14,12 +22,6 @@ def create_person():
     user.save()
     person.save()
     return person
-
-
-SAMPLE_QUESTION_TEXT = "What is a callable?"
-SAMPLE_TESTQUESTION_TEXT = "How many characters are there in ASCII?"
-SAMPLE_EXPLANATION_TEXT = "Function"
-SAMPLE_TOPIC_TEXT = "git"
 
 
 def save_test_questions_to_db():
@@ -34,11 +36,31 @@ def save_test_questions_to_db():
             test_answer="128").save()
 
 
+def do_start_test_for_user(visitor, answer_bool):
+    test_steps_to_show = TestStep.objects.filter(topic="start")
+    for test_step in test_steps_to_show:
+        TestSummary(
+            user=visitor.user,
+            topic="start",
+            test_question=test_step,
+            is_correct=answer_bool).save()
+
+
+def do_final_test_for_user(visitor, answer_bool):
+    test_steps_to_show = TestStep.objects.filter(topic="final")
+    for test_step in test_steps_to_show:
+        TestSummary(
+            user=visitor.user,
+            topic="final",
+            test_question=test_step,
+            is_correct=answer_bool).save()
+
+
 def save_questions_and_answers_to_db():
     for _ in range(5):
         Question(
             question_text=SAMPLE_QUESTION_TEXT,
-            theory_text=SAMPLE_EXPLANATION_TEXT,
+            explanation_text=SAMPLE_EXPLANATION_TEXT,
             topic=SAMPLE_TOPIC_TEXT).save()
     all_questions = Question.objects.all()
     for question in all_questions:
@@ -48,7 +70,7 @@ def save_questions_and_answers_to_db():
             Answer(question=question, answer_text="Yes", correct=True).save()
 
 
-class PersonTests(TestCase):
+class PersonModelTests(TestCase):
     def test_create_person(self):
         person = create_person()
         self.assertEqual(person.user.username, "exampleperson")
@@ -81,7 +103,7 @@ class PersonTests(TestCase):
         self.assertEqual(invite.used_by.username, "itperson")
 
 
-class UserTests(TestCase):
+class UserModelTests(TestCase):
     def test_save_teststep_to_db(self):
         TestStep(
             topic=SAMPLE_TOPIC_TEXT,
@@ -94,7 +116,7 @@ class UserTests(TestCase):
         self.assertIsNotNone(test_step)
 
 
-class Challengetests(TestCase):
+class ChallengeModelTests(TestCase):
     def test_save_question_to_db(self):
         Question(
             question_text=SAMPLE_QUESTION_TEXT,
