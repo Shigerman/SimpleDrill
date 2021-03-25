@@ -2,17 +2,14 @@ from collections import namedtuple
 from itertools import cycle
 import os
 import random
-import urllib
 from uuid import uuid4
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
-from threadlocals.threadlocals import get_current_request
 
-from backend.app.models import Invite, Person
-from backend.app.models import ChallengeSummary, CurrentAnswers
-from backend.app.models import TestSummary, TestStep, Answer, Question
+from backend.app.models import Person, Invite, TestStep, Question, Answer
+from backend.app.models import ChallengeSummary, CurrentAnswers, TestSummary
 from backend.app import views
 
 
@@ -34,7 +31,7 @@ class Visitor:
         try:
             code_to_check = Invite.objects.get(code=invite)
             if not code_to_check.used_by:
-                user = User.objects.create_user(
+                user = User.objects.create_user(  # type: ignore
                     username, email := None, password)
                 person = Person.objects.create(user=user)
                 code_to_check.used_by = user
@@ -65,7 +62,7 @@ class Visitor:
             return redirect("/login_visitor")
 
         invites = Invite.objects.all()
-        return views.render_invites(invites)
+        return views.render_invites(invites) # type: ignore
 
 
     def add_invite(self, comment: str):
@@ -137,7 +134,7 @@ class Visitor:
         return sum(challenges)
 
 
-    def get_target_repetitions_count(self):
+    def get_target_repetitions_count(_):
         return int(os.environ['REPETITION_TARGET'])
 
 
@@ -200,7 +197,7 @@ class Visitor:
             test_score = self.count_test_score()
             return views.render_test_score(test_score)
         # return a question and countdown line: e.g. "3 of 10"
-        return views.render_test_step(test_step, countdown)
+        return views.render_test_step(test_step, countdown)  # type: ignore
 
 
     def get_test_step(self) -> TestStep:
@@ -217,10 +214,10 @@ class Visitor:
         if not user_test_step_count:
             self.set_test_steps(topic='start')
         elif self.visitor_did_final_test():
-            return None
+            return None  # type: ignore
         elif final_question_user_count == 0 and countdown <= 0:
             self.set_test_steps(topic='final')
-        return next(iter(not_answered_test_steps), None)
+        return next(iter(not_answered_test_steps), None)  # type: ignore
 
 
     def get_test_steps_countdown(self) -> str:
@@ -306,7 +303,7 @@ class Challenge:
 
     def __init__(self, visitor):
         self.visitor = visitor
-        self.question: Question = None
+        self.question: Question = None  # type: ignore
         self.answers: list[Answer] = []
         # If True, show correct/wrong answers after user answers wrongly
         # or issued the "don't know" command
@@ -316,7 +313,7 @@ class Challenge:
 def get_current_challenge(visitor: Visitor) -> Challenge:
     saved_answers = CurrentAnswers.objects.filter(person=visitor.person)
     if not saved_answers:
-        return None
+        return None  # type: ignore
 
     challenge = Challenge(visitor)
     # Don't keep question in DB, infer it from answer

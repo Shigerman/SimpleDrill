@@ -19,10 +19,14 @@
     <nu-flex flow="column" height="40" width="21">
         <nu-card height="36" width="21" place="flex-start" fill="grey" color="white" overflow="auto">
         ❓ QUESTION:
-            <p> {{ question }} </p>
+            {% for item in question %}
+               <p>{{ item }}</p>
+            {% endfor %}
         {% if disclose_answers %}
         ❗️ EXPLANATION:
-            <p> {{ explanation }} </p>
+            {% for item in explanation %}
+                <p>{{ item }}</p>
+            {% endfor %}
         {% endif %}
         </nu-card>
 

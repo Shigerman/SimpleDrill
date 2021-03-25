@@ -1,20 +1,25 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from .models import Person, Invite, TestStep, TestSummary, Question
-from .models import CurrentAnswers
+from .models import Person, Invite, TestStep, Question, Answer
 from backend import core
 
 def create_person():
     User = get_user_model()
-    user = User.objects.create_user(
-               username="middlemanperson",
-               password="bar")
-    person = core.user.Person()
+    user = User.objects.create_user(  # type: ignore
+        username="exampleperson",
+        password="bar")
+    person = Person.objects.create(user=user)
     person.user = user
     user.save()
     person.save()
     return person
+
+
+SAMPLE_QUESTION_TEXT = "What is a callable?"
+SAMPLE_TESTQUESTION_TEXT = "How many characters are there in ASCII?"
+SAMPLE_EXPLANATION_TEXT = "Function"
+SAMPLE_TOPIC_TEXT = "git"
 
 
 def save_test_questions_to_db():
@@ -33,7 +38,7 @@ def save_questions_and_answers_to_db():
     for _ in range(5):
         Question(
             question_text=SAMPLE_QUESTION_TEXT,
-            theory_text=SAMPLE_THEORY_TEXT,
+            theory_text=SAMPLE_EXPLANATION_TEXT,
             topic=SAMPLE_TOPIC_TEXT).save()
     all_questions = Question.objects.all()
     for question in all_questions:
@@ -43,16 +48,10 @@ def save_questions_and_answers_to_db():
             Answer(question=question, answer_text="Yes", correct=True).save()
 
 
-SAMPLE_QUESTION_TEXT = "What is a callable?"
-SAMPLE_TESTQUESTION_TEXT = "How many characters are there in ASCII?"
-SAMPLE_EXPLANATION_TEXT = "Function"
-SAMPLE_TOPIC_TEXT = "git"
-
-
 class PersonTests(TestCase):
     def test_create_person(self):
         person = create_person()
-        self.assertEqual(person.user.username, "middlemanperson")
+        self.assertEqual(person.user.username, "exampleperson")
         self.assertTrue(person.user.is_active)
         self.assertFalse(person.user.is_staff)
         self.assertFalse(person.user.is_superuser)
@@ -64,22 +63,22 @@ class PersonTests(TestCase):
 
     def test_save_invite_to_db(self):
         User = get_user_model()
-        invited_user = User.objects.create_user(
+        invited_user = User.objects.create_user(  # type: ignore
                username="itperson",
                password="foo")
         invited_user.save()
-        invited_person = core.user.Person()
+        invited_person = core.Person()
         invited_person.user = invited_user
         invited_person.save()
 
         Invite(code="grihts65hoijr",
-               inviter=create_person(),
-               used_by=invited_person,
+               inviter=create_person().user,
+               used_by=invited_person.user,
                comment="IvanIvanov").save()
         invite = Invite.objects.get(comment="IvanIvanov")
         self.assertEqual(invite.code, "grihts65hoijr")
-        self.assertEqual(invite.inviter.user.username, "middlemanperson")
-        self.assertEqual(invite.used_by.user.username, "itperson")
+        self.assertEqual(invite.inviter.username, "exampleperson")
+        self.assertEqual(invite.used_by.username, "itperson")
 
 
 class UserTests(TestCase):
