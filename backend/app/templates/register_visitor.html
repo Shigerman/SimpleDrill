@@ -21,66 +21,66 @@
 
                 <nu-flex flow="row-reverse" content="start" height="6">
                     <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                        <a href="/login_visitor"> </a>Login</nu-btn>
+                        <a href="/login_visitor"></a>Login</nu-btn>
                 </nu-flex>
 
                 <nu-form id="register_me">
                     <nu-flex flow="row" content="center" items="center">
-                        <nu-card height="4" width="15" place="center">
+                        <nu-card height="4" width="10" place="center">
                             <p> User name: </p>
                         </nu-card>
 
                         <nu-flex flow="row wrap" gap>
-                            <nu-input id="username" height="4" width="15"></nu-input>
+                            <nu-input id="username" height="4" width="22"></nu-input>
                         </nu-flex>
                     </nu-flex>
 
-                    <br></br>
+                    <br>
 
                     <nu-flex flow="row" content="center" items="center">
-                        <nu-card height="4" width="15" place="center">
+                        <nu-card height="4" width="10" place="center">
                             <p> Password: </p>
                         </nu-card>
 
                         <nu-flex flow="row wrap" gap>
-                            <nu-password id="password" height="4" width="15"></nu-password>
+                            <nu-password id="password" height="4" width="22"></nu-password>
                         </nu-flex>
                     </nu-flex>
 
-                    <br></br>
+                    <br>
 
                     <nu-flex flow="row" content="center" items="center">
-                        <nu-card height="4" width="15" place="center">
+                        <nu-card height="4" width="10" place="center">
                             <p> Invitation code: </p>
                         </nu-card>
 
                         <nu-flex flow="row wrap" gap>
-                            <nu-input id="invite" height="4" width="15"></nu-input>
+                            <nu-input id="invite" height="4" width="22"></nu-input>
                         </nu-flex>
                     </nu-flex>
 
-                    <br></br>
+                    <br><br>
 
                     {% if invalid_code %}
                     <nu-flex flow="row" content="center" items="center">
-                        <nu-card fill="hue(12)" color="white">
+                        <nu-card height="4" width="32" fill="hue(12)" color="white">
                             Invalid code. Try again or get a valid invitation code.
                         </nu-card>
                     </nu-flex>
-                    <br></br>
+                    <br>
                     {% endif %}
 
                     {% if empty_field %}
                     <nu-flex flow="row" content="center" items="center">
-                        <nu-card fill="hue(12)" color="white">
+                        <nu-card height="4" width="32" fill="hue(12)" color="white">
                             Empty field. Try again and enter your data.
                         </nu-card>
                     </nu-flex>
-                    <br></br>
+                    <br>
                     {% endif %}
 
                     <nu-flex flow="column" items="center" width="60">
-                        <nu-btn action="submit" height="5" width="20" size="lg" fill="#ffd43b" color="dark grey">
+                        <nu-btn action="submit" height="4" width="32" size="lg" fill="#ffd43b" color="dark grey">
                             Register 
                         </nu-btn>
                     </nu-flex>
