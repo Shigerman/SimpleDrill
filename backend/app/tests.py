@@ -83,9 +83,25 @@ class PersonModelTests(TestCase):
             pass
 
 
+    def test_create_superuser(self):
+        user = get_user_model()
+        admin_user = user.objects.create_superuser(
+            'superuser', 'super@user.com', 'foo')
+        self.assertEqual(admin_user.username, 'superuser')
+        self.assertEqual(admin_user.email, 'super@user.com')
+        self.assertTrue(admin_user.is_active)
+        self.assertTrue(admin_user.is_staff)
+        self.assertTrue(admin_user.is_superuser)
+        with self.assertRaises(ValueError):
+            user.objects.create_superuser(
+                username='superuser',
+                email='super@user.com',
+                password='foo',
+                is_superuser=False)
+
     def test_save_invite_to_db(self):
-        User = get_user_model()
-        invited_user = User.objects.create_user(  # type: ignore
+        user = get_user_model()
+        invited_user = user.objects.create_user(  # type: ignore
                username="itperson",
                password="foo")
         invited_user.save()
@@ -103,17 +119,16 @@ class PersonModelTests(TestCase):
         self.assertEqual(invite.used_by.username, "itperson")
 
 
-class UserModelTests(TestCase):
-    def test_save_teststep_to_db(self):
-        TestStep(
-            topic=SAMPLE_TOPIC_TEXT,
-            test_question=SAMPLE_TESTQUESTION_TEXT,
-            test_answer='128').save()
-        test_step = TestStep.objects.get(
-            topic=SAMPLE_TOPIC_TEXT,
-            test_question=SAMPLE_TESTQUESTION_TEXT)
-        self.assertEqual(test_step.test_answer, "128")
-        self.assertIsNotNone(test_step)
+class UserTestModelTests(TestCase):
+    def test_start_testquestions_are_written_into_db_for_user(self):
+        visitor = create_person()
+        save_test_questions_to_db()
+        start_question_count = len(TestStep.objects.filter(topic="start"))
+
+        backend.core.visitor.set_test_steps(visitor=visitor, topic="start")
+        user_start_question_count = len(TestSummary.objects.filter(
+            user=visitor, topic="start"))
+        self.assertEqual(start_question_count, user_start_question_count)
 
 
 class ChallengeModelTests(TestCase):
