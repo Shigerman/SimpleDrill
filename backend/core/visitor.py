@@ -134,7 +134,7 @@ class Visitor:
         return sum(challenges)
 
 
-    def get_target_repetitions_count(_):
+    def get_target_repetitions_count(self):
         return int(os.environ['REPETITION_TARGET'])
 
 
@@ -191,7 +191,7 @@ class Visitor:
 
 
     def show_test_step(self):
-        test_step: TestStep = self.get_test_step()
+        test_step: TestSummary = self.get_test_summary_step()
         countdown: str = self.get_test_steps_countdown()
         if not test_step:
             test_score = self.count_test_score()
@@ -200,7 +200,7 @@ class Visitor:
         return views.render_test_step(test_step, countdown)  # type: ignore
 
 
-    def get_test_step(self) -> TestStep:
+    def get_test_summary_step(self) -> TestSummary:
         # User takes the start test before doing drills.
         # After doing the target number of drills, they can take final test.
         user_test_step_count = len(TestSummary.objects.filter(
@@ -259,21 +259,20 @@ class Visitor:
     def check_test_answer(self, test_answer: str = None):
         # Save True/False into db depending on answer correctness.
         # Also save the actual user answer to check our check correctness.
-        test_step = self.get_test_step()
+        test_summary_step = self.get_test_summary_step()
         test_answer = test_answer.lower()
-        correct_test_answer = test_step.test_question.test_answer
+        correct_test_answer = test_summary_step.test_question.test_answer
 
         is_correct_user_answer = correct_test_answer in test_answer
         # 5 is taken here to omit unneseccary symbols, spaces, dots, etc
-        user_answer_not_long = \
-            len(test_answer) <= (len(correct_test_answer) + 5)
+        answer_not_long = len(test_answer) <= (len(correct_test_answer) + 5)
 
-        if is_correct_user_answer and user_answer_not_long:
-            test_step.is_correct = True
+        if is_correct_user_answer and answer_not_long:
+            test_summary_step.is_correct = True
         else:
-            test_step.is_correct = False
-        test_step.user_answer = test_answer
-        test_step.save()
+            test_summary_step.is_correct = False
+        test_summary_step.user_answer = test_answer
+        test_summary_step.save()
         return self.show_test_step()
 
 
