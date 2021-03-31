@@ -24,7 +24,7 @@
 
                 <nu-flex flow="column" content="center" height="21" items="center">
                     <nu-card content="center" height="15" width="27" fill="#306998" color="white" overflow="auto">
-                        {% for item in explanation_text %}
+                        {% for item in foreword %}
                             <p> {{ item }} </p>
                         {% endfor %}
                     </nu-card>
@@ -32,7 +32,7 @@
                     <br></br>
 
                     <nu-btn height="5" width="27" size="lg" fill="#ffd43b" color="dark grey">
-                        <a id="btn_submit" action="submit" href={{page_to_go}}></a></a>{{ button_text }}</nu-btn>
+                        <a id="btn_submit" action="submit" href={{page_to_go_to}}></a></a>{{btn_text}}</nu-btn>
                 </nu-flex>
 
             </nu-flex>

@@ -1,8 +1,8 @@
-from collections import namedtuple
 from itertools import cycle
 import os
 import random
 from uuid import uuid4
+from dataclasses import dataclass
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -13,7 +13,11 @@ from backend.app.models import ChallengeSummary, CurrentAnswers, TestSummary
 from backend.app import views
 
 
-Explanation = namedtuple('Explanation', 'text page_to_go button_text')
+@dataclass
+class TestExplanationPage:
+    foreword: str
+    page_to_go_to: str
+    btn_text: str
 
 
 class Visitor:
@@ -98,34 +102,58 @@ class Visitor:
 
 
     def show_test_explanation(self):
-        user_challenges_count = self.count_user_challenges()
-        countdown = self.get_countdown_to_final_test()
+        countdown: int = self.get_countdown_to_final_test()
         start_test_score, final_test_score = self.count_test_score()
 
         if not self.visitor_did_start_test():
-            text = ("We recommend that you take our test before you start" +
-                " Python drills.")
-            page_to_go = "/test"
-            button_text = "Take the start test"
+            return self._offer_test_before_start()
         elif countdown > 0:
-            text = (f"Your start test score: {start_test_score}.\nAfter " +
-                f"doing {countdown} drills you will be able to take the " +
-                "test again.\nGo and practice!")
-            page_to_go = "/select_topic"
-            button_text = "Go and practice!"
+            return self._tell_countdown_to_final_test(
+                countdown, start_test_score)
         elif self.visitor_did_final_test():
-            text = ("Congratulations!\nYou have completed all the tests."
-                + f"\nYour start test score: {start_test_score}.\nYour final "
-                +f"test score: {final_test_score}.")
-            page_to_go = "/select_topic"
-            button_text = "Go and practice!"
+            return self._tell_results_of_two_tests(
+                start_test_score, final_test_score)
         else:
-            text = ("You have done a lot of drilling.\n" +
-                "It is time to take your final test.")
-            page_to_go = "/test"
-            button_text = "Take the final test"
-        test_explanation = Explanation(text,page_to_go,button_text)
-        return views.render_explain_test(test_explanation)
+            return self._offer_final_test()
+
+
+    def _offer_test_before_start(self):
+        return views.render_explain_test(TestExplanationPage(
+            foreword="We recommend that you take our test before you " +
+                    "start Python drills.",
+            page_to_go_to="/test",
+            btn_text="Take the start test",
+        ))
+
+
+    def _tell_countdown_to_final_test(_, countdown, start_test_score):
+        return views.render_explain_test(TestExplanationPage(
+            foreword=f"Your start test score: {start_test_score}.\n" +
+                    f"After doing {countdown} drills you will be able " +
+                    "to take the test again.\nGo and practice!",
+            page_to_go_to="/select_topic",
+            btn_text="Go and practice!",
+        ))
+
+
+    def _tell_results_of_two_tests(_, start_test_score, final_test_score):
+        return views.render_explain_test(TestExplanationPage(
+            foreword="Congratulations!\n" +
+                    "You have completed all the tests.\n" +
+                    f"Your start test score: {start_test_score}.\n" +
+                    f"Your final test score: {final_test_score}.",
+            page_to_go_to="/select_topic",
+            btn_text="Go and practice!",
+        ))
+
+
+    def _offer_final_test(self):
+        return views.render_explain_test(TestExplanationPage(
+            foreword="You have done a lot of drilling.\n" +
+                    "It is time to take your final test.",
+            page_to_go_to = "/test",
+            btn_text = "Take the final test",
+        ))
 
 
     def count_user_challenges(self) -> int:
