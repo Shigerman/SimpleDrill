@@ -266,7 +266,7 @@ class Visitor:
         test_questions_to_show = TestStep.objects.filter(topic=topic)
 
         if len(test_questions_to_show) == 0:
-            raise Exception("500 internal server error")
+            raise Exception("Error: There are no test questions to display")
 
         # Test steps are to be taken only once each and their quantity
         # in a test is defined, so all test steps are written into db
@@ -344,8 +344,8 @@ def get_current_challenge(visitor: Visitor) -> Challenge:
 
     challenge = Challenge(visitor)
     # Don't keep question in DB, infer it from answer
-    first_answer = next(iter(saved_answers))
-    challenge.question = Answer.objects.get(pk=first_answer.answer_id).question
+    any_answer = next(iter(saved_answers))
+    challenge.question = Answer.objects.get(pk=any_answer.answer_id).question
     challenge.answers = [
         Answer.objects.get(pk=answer.answer_id) for answer in saved_answers
     ]
@@ -404,7 +404,7 @@ def set_topic_challenges(visitor: Visitor, topic: str):
     topic_questions = Question.objects.filter(topic=topic)
 
     if len(topic_questions) == 0:
-        raise Exception("500 internal server error")
+        raise Exception("Error: There are no questions to display")
 
     for question in topic_questions:
         ChallengeSummary(person=visitor.person, question=question).save()
