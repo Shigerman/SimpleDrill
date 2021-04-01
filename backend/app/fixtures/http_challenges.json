@@ -214,7 +214,7 @@
   },
   { "topic": "http",
     "q": "What http response code tells that the server cannot handle the request (because it is overloaded or down for maintenance)?",
-    "th": "'503 Service Unavailable' is the http response code telling that the server cannot handle the request (because it is overloaded or down for maintenance.",
+    "th": "'503 Service Unavailable' is the http response code telling that the server cannot handle the request (because it is overloaded or down for maintenance).",
     "+": ["503"],
     "-": [
       "500",
