@@ -3,7 +3,8 @@ from django.contrib.auth import get_user_model
 
 from .models import Person, Invite, TestStep, Question, Answer
 from .models import TestSummary
-from backend import core
+import backend.core
+import backend.core.visitor
 
 
 SAMPLE_TESTQUESTION_TEXT = "How many characters are there in ASCII?"
@@ -99,13 +100,14 @@ class PersonModelTests(TestCase):
                 password='foo',
                 is_superuser=False)
 
+
     def test_save_invite_to_db(self):
         user = get_user_model()
         invited_user = user.objects.create_user(  # type: ignore
                username="itperson",
                password="foo")
         invited_user.save()
-        invited_person = core.Person()
+        invited_person = backend.core.Person()
         invited_person.user = invited_user
         invited_person.save()
 
@@ -120,14 +122,16 @@ class PersonModelTests(TestCase):
 
 
 class UserTestModelTests(TestCase):
+
     def test_start_testquestions_are_written_into_db_for_user(self):
-        visitor = create_person()
+        person = create_person()
         save_test_questions_to_db()
         start_question_count = len(TestStep.objects.filter(topic="start"))
 
-        backend.core.visitor.set_test_steps(visitor=visitor, topic="start")
+        visitor = backend.core.visitor.Visitor(user=person.user)
+        visitor.set_test_steps(topic="start")
         user_start_question_count = len(TestSummary.objects.filter(
-            user=visitor, topic="start"))
+            person=person, topic="start"))
         self.assertEqual(start_question_count, user_start_question_count)
 
 

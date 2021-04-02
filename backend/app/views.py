@@ -1,12 +1,12 @@
+from __future__ import annotations
 import urllib.parse
 
 import django.contrib.auth
 from django.shortcuts import render, redirect
 from threadlocals.threadlocals import get_current_request
 
+import backend.core
 import backend.core.visitor
-from backend import core
-from backend.core.visitor import Visitor
 from .models import Person, Invite, TestSummary
 
 
@@ -14,13 +14,13 @@ def need_logged_in_visitor(handler):
     def decorated(request):
         if not request.user.is_authenticated:
             return redirect("/login_visitor")
-        visitor = Visitor(user=request.user)
+        visitor = backend.core.visitor.Visitor(user=request.user)
         return handler(request, visitor)
     return decorated
 
 
 @need_logged_in_visitor
-def homepage(_, visitor: Visitor):
+def homepage(_, visitor: backend.core.visitor.Visitor):
     return visitor.get_button_test_info()
 
 
@@ -45,7 +45,8 @@ def register_visitor(request):
         username = urllib.parse.unquote(username)
         password = urllib.parse.unquote(password)
         invite = urllib.parse.unquote(invite)
-        return Visitor.register(username, password, invite)
+        return backend.core.visitor.Visitor.register(
+            username, password, invite)
     else:
         return render_register_visitor(empty_field=True, invalid_code=False)
 
@@ -71,7 +72,7 @@ def login_visitor(request):
     elif all(credentials):
         username = urllib.parse.unquote(username)
         password = urllib.parse.unquote(password)
-        return Visitor.login(username, password)
+        return backend.core.visitor.Visitor.login(username, password)
     else:
         return render_login_visitor(invalid_credentials=True)
 
@@ -82,7 +83,7 @@ def render_login_visitor(invalid_credentials: bool = False):
 
 
 @need_logged_in_visitor
-def logout_visitor(_, visitor: Visitor):
+def logout_visitor(_, visitor: backend.core.visitor.Visitor):
     return visitor.logout()
 
 
@@ -95,7 +96,7 @@ def disconnect_person_from_session(_):
 
 
 @need_logged_in_visitor
-def add_invite(request, visitor: Visitor):
+def add_invite(request, visitor: backend.core.visitor.Visitor):
     comment = request.GET.get('comment')
     if not comment:
         return redirect("view_invites")
@@ -104,7 +105,7 @@ def add_invite(request, visitor: Visitor):
 
 
 @need_logged_in_visitor
-def view_invites(_, visitor: Visitor):
+def view_invites(_, visitor: backend.core.visitor.Visitor):
     return visitor.show_invites()
 
 
@@ -114,7 +115,7 @@ def render_invites(invites: Invite):
 
 
 @need_logged_in_visitor
-def explain_test(_, visitor: Visitor):
+def explain_test(_, visitor: backend.core.visitor.Visitor):
     return visitor.show_test_explanation()
 
 
@@ -129,7 +130,7 @@ def render_explain_test(
 
 
 @need_logged_in_visitor
-def select_topic(request, visitor: Visitor):
+def select_topic(request, visitor: backend.core.visitor.Visitor):
     # user has to take the start test before drilling topics
     if not visitor.visitor_did_start_test():
         return redirect("/explain_test")
@@ -140,7 +141,7 @@ def select_topic(request, visitor: Visitor):
 
 
 @need_logged_in_visitor
-def test(request, visitor: Visitor):
+def test(request, visitor: backend.core.visitor.Visitor):
     test_answer = request.GET.get('test_answer')
     if not test_answer:
         return visitor.show_test_step()
@@ -165,7 +166,7 @@ def render_test_score(test_score: tuple):
 
 
 @need_logged_in_visitor
-def drill_topic(request, visitor: Visitor):
+def drill_topic(request, visitor: backend.core.visitor.Visitor):
     answer_choice = request.GET.get('choice')
 
     if request.GET.get('next') == "next":
