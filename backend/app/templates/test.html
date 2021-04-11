@@ -56,13 +56,13 @@
 
                 {% if start_score %}
                     <nu-btn height="5" width="28" size="lg" fill="#ffd43b" color="dark grey">
-                        <a id="btn_submit" action="submit" href="/select_topic"></a>Go and practice!
+                        <a id="btn_submit" action="submit" href="{% url 'select-topic' %}"></a>Go and practice!
                     </nu-btn>
             
             {% else %}
             <nu-flex flow="row" content="center" items="center">
                 <nu-btn height="5" width="14" size="lg" fill="grey" color="white">
-                    <a id="no_answer" href="/test?test_answer=no_answer"> </a>I don't know
+                    <a id="no_answer" href="{% url 'test' '?test_answer=no_answer' %}"> </a>I don't know
                 </nu-btn>
 
                 <nu-btn action="submit" height="5" width="14" size="lg" fill="#ffd43b" color="dark grey">

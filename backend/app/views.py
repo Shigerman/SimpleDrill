@@ -3,6 +3,7 @@ import urllib.parse
 
 import django.contrib.auth
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from threadlocals.threadlocals import get_current_request
 
 import backend.core
@@ -13,7 +14,7 @@ from .models import Person, Invite, TestSummary
 def need_logged_in_visitor(handler):
     def decorated(request):
         if not request.user.is_authenticated:
-            return redirect("/login_visitor")
+            return redirect(reverse("login-visitor"))
         visitor = backend.core.visitor.Visitor(user=request.user)
         return handler(request, visitor)
     return decorated
@@ -99,7 +100,7 @@ def disconnect_person_from_session(_):
 def add_invite(request, visitor: backend.core.visitor.Visitor):
     comment = request.GET.get('comment')
     if not comment:
-        return redirect("view_invites")
+        return redirect(reverse("view-invites"))
     visitor.add_invite(comment=comment)
     return visitor.show_invites()
 
@@ -133,7 +134,7 @@ def render_explain_test(
 def select_topic(request, visitor: backend.core.visitor.Visitor):
     # user has to take the start test before drilling topics
     if not visitor.visitor_did_start_test():
-        return redirect("/explain_test")
+        return redirect(reverse("explain-test"))
     topic = request.GET.get('topic')
     if topic:
         return visitor.want_to_drill(topic=topic)

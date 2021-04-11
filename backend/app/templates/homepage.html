@@ -8,27 +8,27 @@
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="about"> </a>About</nu-btn>
+                    <a href="{% url 'about' %}"> </a>About</nu-btn>
             </nu-flex>
 
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="logout_visitor"> </a>Logout</nu-btn>
+                    <a href="{% url 'logout-visitor' %}"> </a>Logout</nu-btn>
             </nu-flex>
 
             {% if user.is_staff %}
             <nu-flex flow="row-reverse" items="center" height="6">
                 <nu-btn height="3" width="10" size="sm" fill="grey" color="white">
-                    <a href="view_invites"> </a>Invites</nu-btn>
+                    <a href="{% url 'view-invites' %}"> </a>Invites</nu-btn>
             </nu-flex>
             {% endif %}
 
             <nu-flex content="space-around" items="center" height="18">
                 <nu-btn height="7" width="20" size="lg" fill="#306998" color="white">
-                    <a href="select_topic"> </a>Drill</nu-btn>
+                    <a href="{% url 'select-topic' %}"> </a>Drill</nu-btn>
 
                 <nu-btn height="7" width="20" size="lg" fill="#ffd43b" color="dark grey">
-                    <a href="explain_test"> </a>{{ button_test_info }}</nu-btn>
+                    <a href="{% url 'explain-test' %}"> </a>{{ button_test_info }}</nu-btn>
             </nu-flex>
 
         </nu-flex>

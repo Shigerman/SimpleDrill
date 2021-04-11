@@ -15,21 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-import backend.app.views
+from backend.app import views
 
 app_name = 'app'
 
 urlpatterns = [
-    path('', backend.app.views.homepage),
-    path('register_visitor/', backend.app.views.register_visitor),
-    path('view_invites/', backend.app.views.view_invites),
-    path('add_invite/', backend.app.views.add_invite),
-    path('login_visitor/', backend.app.views.login_visitor),
-    path('logout_visitor/', backend.app.views.logout_visitor),
-    path('about/', backend.app.views.about),
-    path('select_topic/', backend.app.views.select_topic),
-    path('drill_topic/', backend.app.views.drill_topic),
-    path('explain_test/', backend.app.views.explain_test),
-    path('test/', backend.app.views.test),
+    path('', views.homepage),
+    path('register_visitor/', views.register_visitor, name='register-visitor'),
+    path('view_invites/', views.view_invites, name='view-invites'),
+    path('add_invite/', views.add_invite, name='add-invite'),
+    path('login_visitor/', views.login_visitor, name='login-visitor'),
+    path('logout_visitor/', views.logout_visitor, name='logout-visitor'),
+    path('about/', views.about, name='about'),
+    path('select_topic/', views.select_topic, name='select-topic'),
+    path('drill_topic/', views.drill_topic, name='drill-topic'),
+    path('explain_test/', views.explain_test, name='explain-test'),
+    path('test/', views.test, name='test'),
     path('admin/', admin.site.urls),
 ]

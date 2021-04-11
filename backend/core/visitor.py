@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
+from django.urls import reverse
 
 from backend.app.models import Person, Invite, TestStep, Question, Answer
 from backend.app.models import ChallengeSummary, CurrentAnswers, TestSummary
@@ -63,7 +64,7 @@ class Visitor:
 
     def show_invites(self):
         if not self.person.user.is_staff:
-            return redirect("/login_visitor")
+            return redirect(reverse("login-visitor"))
 
         invites = Invite.objects.all()
         return views.render_invites(invites) # type: ignore
@@ -71,7 +72,7 @@ class Visitor:
 
     def add_invite(self, comment: str):
         if not self.person.user.is_staff:
-            return redirect("/login_visitor")
+            return redirect(reverse("login-visitor"))
 
         Invite.objects.create(
             inviter=self.person.user,
@@ -310,7 +311,7 @@ class Visitor:
             CurrentAnswers.objects.filter(person=self.person).delete()
             self.person.challenge_topic = topic
             self.person.save()
-        return redirect("/drill_topic")
+        return redirect(reverse("drill-topic"))
 
 
     def show_challenge(self):
