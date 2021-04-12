@@ -10,7 +10,7 @@
         Object.entries(e.detail)
         .map(pair => pair.map(name => encodeURIComponent(name)))
         .map(pair => pair.join("=")).join("&")
-      window.location.href = "/add_invite?" + paramsFromJson;
+      window.location.href = "{% url 'add-invite' %}?" + paramsFromJson;
     });
   });
 </script>
