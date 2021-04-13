@@ -124,7 +124,7 @@ def render_explain_test(
         explanation: backend.core.visitor.TestExplanationPage):
     context = {
         'foreword': explanation.foreword.split("\n"),
-        'page_to_go_to': explanation.page_to_go_to,
+        'url_name_to_go_to': explanation.url_name_to_go_to,
         'btn_text': explanation.btn_text,
     }
     return render(get_current_request(), 'explain_test.html', context)

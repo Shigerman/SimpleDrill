@@ -17,7 +17,7 @@ from backend.app import views
 @dataclass
 class TestExplanationPage:
     foreword: str
-    page_to_go_to: str
+    url_name_to_go_to: str
     btn_text: str
 
 
@@ -122,7 +122,7 @@ class Visitor:
         return views.render_explain_test(TestExplanationPage(
             foreword="We recommend that you take our test before you " +
                     "start Python drills.",
-            page_to_go_to="/test",
+            url_name_to_go_to="test",
             btn_text="Take the start test",
         ))
 
@@ -132,7 +132,7 @@ class Visitor:
             foreword=f"Your start test score: {start_test_score}.\n" +
                     f"After doing {countdown} drills you will be able " +
                     "to take the test again.\nGo and practice!",
-            page_to_go_to="/select_topic",
+            url_name_to_go_to="select-topic",
             btn_text="Go and practice!",
         ))
 
@@ -143,7 +143,7 @@ class Visitor:
                     "You have completed all the tests.\n" +
                     f"Your start test score: {start_test_score}.\n" +
                     f"Your final test score: {final_test_score}.",
-            page_to_go_to="/select_topic",
+            url_name_to_go_to="select-topic",
             btn_text="Go and practice!",
         ))
 
@@ -152,7 +152,7 @@ class Visitor:
         return views.render_explain_test(TestExplanationPage(
             foreword="You have done a lot of drilling.\n" +
                     "It is time to take your final test.",
-            page_to_go_to = "/test",
+            url_name_to_go_to = "test",
             btn_text = "Take the final test",
         ))
 
