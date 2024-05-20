@@ -1,4 +1,7 @@
 # simpledrill
+
+![logo](https://github.com/Shigerman/drill/raw/master/drill.jpg)
+
 A service to learn programming based on exercise repetition.
 
 ### instruments used
